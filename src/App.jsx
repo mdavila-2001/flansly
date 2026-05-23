@@ -72,11 +72,11 @@ function App() {
       <header className="sticky top-0 z-40 backdrop-blur-xl bg-flansly-dark/70 border-b border-flansly-surface/50">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-flansly-caramel to-flansly-flan flex items-center justify-center shadow-[0_0_20px_rgba(180,83,9,0.3)]">
+            <div className="w-9 h-9 rounded-xl bg-linear-to-br from-flansly-caramel to-flansly-flan flex items-center justify-center shadow-[0_0_20px_rgba(180,83,9,0.3)]">
               <span className="text-lg">🍮</span>
             </div>
             <div>
-              <h1 className="text-xl font-bold text-flansly-flan font-[var(--font-manrope)] tracking-tight">
+              <h1 className="text-xl text-flansly-flan font(--font-manrope) tracking-tight">
                 Flansly UI
               </h1>
               <p className="text-[11px] text-flansly-muted -mt-0.5 font-mono">
@@ -139,7 +139,7 @@ function App() {
 
           {/* ━━ SECCIÓN 1: Texto & Búsqueda ━━ */}
           <section className="bg-flansly-card/50 backdrop-blur-sm rounded-2xl p-6 border border-flansly-surface/30">
-            <h2 className="text-lg font-bold text-flansly-flan font-[var(--font-manrope)] mb-1 flex items-center gap-2">
+            <h2 className="text-lg text-flansly-flan font(--font-manrope) mb-1 flex items-center gap-2">
               <User size={18} className="text-flansly-caramel" />
               Campos de Texto
             </h2>
@@ -210,7 +210,7 @@ function App() {
 
           {/* ━━ SECCIÓN 2: Valores & Fechas ━━ */}
           <section className="bg-flansly-card/50 backdrop-blur-sm rounded-2xl p-6 border border-flansly-surface/30">
-            <h2 className="text-lg font-bold text-flansly-flan font-[var(--font-manrope)] mb-1 flex items-center gap-2">
+            <h2 className="text-lg text-flansly-flan font(--font-manrope) mb-1 flex items-center gap-2">
               <Calendar size={18} className="text-flansly-caramel" />
               Valores y Fechas
             </h2>
@@ -266,7 +266,7 @@ function App() {
 
           {/* ━━ SECCIÓN 3: Select & Textarea ━━ */}
           <section className="bg-flansly-card/50 backdrop-blur-sm rounded-2xl p-6 border border-flansly-surface/30">
-            <h2 className="text-lg font-bold text-flansly-flan font-[var(--font-manrope)] mb-1 flex items-center gap-2">
+            <h2 className="text-lg text-flansly-flan font(--font-manrope) mb-1 flex items-center gap-2">
               <ChevronDown size={18} className="text-flansly-caramel" />
               Selectores
             </h2>
@@ -295,7 +295,7 @@ function App() {
 
           {/* ━━ SECCIÓN 4: Interactivos ━━ */}
           <section className="bg-flansly-card/50 backdrop-blur-sm rounded-2xl p-6 border border-flansly-surface/30">
-            <h2 className="text-lg font-bold text-flansly-flan font-[var(--font-manrope)] mb-1 flex items-center gap-2">
+            <h2 className="text-lg text-flansly-flan font(--font-manrope) mb-1 flex items-center gap-2">
               <Palette size={18} className="text-flansly-caramel" />
               Interactivos
             </h2>
@@ -369,7 +369,7 @@ function App() {
 
           {/* ━━ SECCIÓN 5: Cargador de Archivos ━━ */}
           <section className="bg-flansly-card/50 backdrop-blur-sm rounded-2xl p-6 border border-flansly-surface/30">
-            <h2 className="text-lg font-bold text-flansly-flan font-[var(--font-manrope)] mb-1 flex items-center gap-2">
+            <h2 className="text-lg text-flansly-flan font(--font-manrope) mb-1 flex items-center gap-2">
               <Hash size={18} className="text-flansly-caramel" />
               Cargador de Archivos
             </h2>

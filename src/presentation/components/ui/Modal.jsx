@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { X } from 'lucide-react';
 
 export const Modal = ({
@@ -32,4 +33,11 @@ export const Modal = ({
             </div>
         </div>
     );
+};
+
+Modal.propTypes = {
+    isOpen: PropTypes.bool.isRequired,        
+    onClose: PropTypes.func.isRequired,       
+    title: PropTypes.string.isRequired,       
+    children: PropTypes.node.isRequired       
 };

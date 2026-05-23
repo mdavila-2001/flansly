@@ -402,7 +402,7 @@ function App() {
         {/* ── Console / State Viewer ── */}
         <aside className={`
           hidden lg:flex flex-col
-          w-80 flex-shrink-0 sticky top-24 self-start
+          w-80 shrink-0 sticky top-24 self-start
           bg-flansly-card/80 backdrop-blur-sm rounded-2xl
           border overflow-hidden
           transition-all duration-300

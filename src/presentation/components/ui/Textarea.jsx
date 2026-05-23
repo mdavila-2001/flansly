@@ -16,7 +16,7 @@ export const Textarea = forwardRef(
         return (
             <div className="flex flex-col gap-1.5 w-full">
                 {label && (
-                    <label className="text-flansly-muted text-sm font-medium font-[var(--font-inter)] tracking-wide">
+                    <label className="text-flansly-muted text-sm font-medium font(--font-inter) tracking-wide">
                         {label}
                     </label>
                 )}
@@ -39,8 +39,8 @@ export const Textarea = forwardRef(
                         className={`
                             w-full bg-transparent px-4 py-3
                             text-flansly-flan placeholder-flansly-muted
-                            outline-none resize-y min-h-[100px]
-                            font-[var(--font-inter)]
+                            outline-none resize-y min-h-25
+                            font(--font-inter)
                             disabled:cursor-not-allowed
                             ${className}
                         `}
@@ -49,7 +49,7 @@ export const Textarea = forwardRef(
                 </div>
                 <div className="flex items-center justify-between">
                     {error && (
-                        <span className="text-flansly-error text-xs font-[var(--font-inter)] animate-[slide-in_0.2s_ease]">
+                        <span className="text-flansly-error text-xs font(--font-inter) animate-[slide-in_0.2s_ease]">
                             {error}
                         </span>
                     )}

@@ -16,7 +16,7 @@ export const Radio = forwardRef(
         return (
             <div className={`flex flex-col gap-1.5 ${className}`}>
                 {label && (
-                    <span className="text-flansly-muted text-sm font-medium font-[var(--font-inter)] tracking-wide">
+                    <span className="text-flansly-muted text-sm font-medium font(--font-inter) tracking-wide">
                         {label}
                     </span>
                 )}
@@ -34,7 +34,7 @@ export const Radio = forwardRef(
                                     ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
                                 `}
                             >
-                                <div className="relative flex-shrink-0">
+                                <div className="relative shrink-0">
                                     <input
                                         ref={isChecked ? ref : undefined}
                                         type="radio"
@@ -63,7 +63,7 @@ export const Radio = forwardRef(
                                         )}
                                     </div>
                                 </div>
-                                <span className="text-flansly-flan/90 text-sm font-[var(--font-inter)]">
+                                <span className="text-flansly-flan/90 text-sm font(--font-inter)">
                                     {opt.label}
                                 </span>
                             </label>
@@ -71,7 +71,7 @@ export const Radio = forwardRef(
                     })}
                 </div>
                 {error && (
-                    <span className="text-flansly-error text-xs font-[var(--font-inter)] animate-[slide-in_0.2s_ease]">
+                    <span className="text-flansly-error text-xs font(--font-inter) animate-[slide-in_0.2s_ease]">
                         {error}
                     </span>
                 )}

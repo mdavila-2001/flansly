@@ -19,7 +19,7 @@ export const Slider = forwardRef(
                 {(label || showValue) && (
                     <div className="flex items-center justify-between">
                         {label && (
-                            <label className="text-flansly-muted text-sm font-medium font-[var(--font-inter)] tracking-wide">
+                            <label className="text-flansly-muted text-sm font-medium font(--font-inter) tracking-wide">
                                 {label}
                             </label>
                         )}
@@ -51,7 +51,7 @@ export const Slider = forwardRef(
                     <span>{max}{unit}</span>
                 </div>
                 {error && (
-                    <span className="text-flansly-error text-xs font-[var(--font-inter)] animate-[slide-in_0.2s_ease]">
+                    <span className="text-flansly-error text-xs font(--font-inter) animate-[slide-in_0.2s_ease]">
                         {error}
                     </span>
                 )}

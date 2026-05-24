@@ -44,7 +44,14 @@ function AppTest() {
     const fileRef = useRef(null);
 
     const set = useCallback((key) => (e) => {
-        const val = e?.target ? (e.target.type === 'checkbox' ? e.target.checked : e.target.value) : e;
+        let val = e;
+        if (e?.target) {
+            if (e.target.type === 'checkbox') {
+                val = e.target.checked;
+            } else {
+                val = e.target.value;
+            }
+        }
         setForm(prev => ({ ...prev, [key]: val }));
     }, []);
 
@@ -117,23 +124,17 @@ function AppTest() {
                     <section className='bg-flansly-card/50 backdrop-blur-sm rounded-2xl p-6 border border-flansly-surface/30'>
                         <h2>Botones</h2>
                         <div className='grid grid-cols-1 md:grid-cols-2 gap-5'>
-                            <Button
-                                variant='primary'
-                                children={
-                                    <p>
-                                        Botón Primario
-                                    </p>
-                                }
-                            />
+                            <Button variant='primary'>
+                                <p>
+                                    Botón Primario
+                                </p>
+                            </Button>
 
-                            <Button
-                                variant='secondary'
-                                children={
-                                    <p>
-                                        Botón Secundario
-                                    </p>
-                                }
-                            />
+                            <Button variant='secondary'>
+                                <p>
+                                    Botón Secundario
+                                </p>
+                            </Button>
                         </div>
                     </section>
                     
@@ -406,15 +407,15 @@ function AppTest() {
                     bg-flansly-card/80 backdrop-blur-sm rounded-2xl
                     border overflow-hidden
                     transition-all duration-300
-                    ${form.color !== '#B45309'
-                        ? `border-[${form.color}]/40 shadow-[0_0_20px_${form.color}20]`
-                        : 'border-flansly-surface/30'
+                    ${form.color === '#B45309'
+                        ? 'border-flansly-surface/30'
+                        : `border-[${form.color}]/40 shadow-[0_0_20px_${form.color}20]`
                     }
                 `}
-                style={form.color !== '#B45309' ? {
+                style={form.color === '#B45309' ? {} : {
                     borderColor: `${form.color}66`,
                     boxShadow: `0 0 20px ${form.color}20`
-                } : {}}
+                }}
                 >
                     <button
                         onClick={() => setConsoleOpen(v => !v)}

@@ -5,11 +5,11 @@ import { AuthContext } from './AuthContext';
 const decodeJwt = (token) => {
     try {
         const base64Url = token.split('.')[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const base64 = base64Url.replaceAll('-', '+').replaceAll('_', '/');
         const jsonPayload = decodeURIComponent(
-            window.atob(base64)
+            globalThis.atob(base64)
                 .split('')
-                .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+                .map((c) => '%' + ('00' + c.codePointAt(0).toString(16)).slice(-2))
                 .join('')
         );
         return JSON.parse(jsonPayload);

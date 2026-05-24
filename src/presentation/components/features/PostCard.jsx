@@ -8,12 +8,27 @@ export const PostCard = ({ post }) => {
         year: 'numeric'
     });
 
+    // Helper dinámico para inyectar la URL del backend a recursos estáticos subidos
+    const resolveImageUrl = (url) => {
+        if (!url) return '';
+        // Si ya es una URL completa (http/https) o un base64, lo deja pasar directo
+        if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
+            return url;
+        }
+        // Si es el asset por defecto del logo local de la carpeta public del front, no concatenar backend
+        if (url === '/flansly_logo.png') {
+            return url;
+        }
+        const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+        return `${baseUrl}${url}`;
+    };
+
     return (
         <div className="w-full bg-flansly-card border border-flansly-surface/30 rounded-2xl p-6 flex flex-col gap-4 shadow-[0_4px_20px_rgba(0,0,0,0.2)]">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <img 
-                        src={post.creator?.profileImageUrl || '/flansly_logo.png'} 
+                        src={resolveImageUrl(post.creator?.profileImageUrl) || '/flansly_logo.png'} 
                         alt={post.creator?.displayName} 
                         className="w-10 h-10 rounded-full border border-flansly-surface object-cover"
                     />
@@ -41,7 +56,7 @@ export const PostCard = ({ post }) => {
             {post.imageUrl && (
                 <div className="w-full rounded-xl overflow-hidden border border-flansly-surface/40 bg-flansly-dark/50">
                     <img 
-                        src={post.imageUrl} 
+                        src={resolveImageUrl(post.imageUrl)} 
                         alt="Material exclusivo" 
                         className="w-full max-h-112.5 object-cover hover:scale-[1.01] transition-transform duration-300"
                     />

@@ -24,15 +24,27 @@ export const CreatorProfileView = () => {
 
     const { creator, supportGoal, hasDonated, posts } = currentProfile;
 
+    const resolveImageUrl = (url) => {
+        if (!url) return '';
+        if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
+            return url;
+        }
+        if (url === '/flansly_logo.png') {
+            return url;
+        }
+        const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+        return `${baseUrl}${url}`;
+    };
+
     return (
         <div className="space-y-6 max-w-4xl mx-auto">
             <div className="bg-flansly-card rounded-2xl border border-flansly-surface/30 overflow-hidden relative shadow-xl">
                 <div className="w-full h-48 bg-flansly-surface relative">
-                    {creator.bannerImageUrl && <img src={creator.bannerImageUrl} alt="Banner" className="w-full h-full object-cover" />}
+                    {creator.bannerImageUrl && <img src={resolveImageUrl(creator.bannerImageUrl)} alt="Banner" className="w-full h-full object-cover" />}
                 </div>
                 <div className="px-8 pb-6 flex flex-col sm:flex-row items-center sm:items-end justify-between -mt-16 relative z-10 gap-4">
                     <div className="flex flex-col sm:flex-row items-center sm:items-end gap-4 text-center sm:text-left">
-                        <img src={creator.profileImageUrl || '/flansly_logo.png'} alt={creator.displayName} className="w-28 h-28 rounded-full border-4 border-flansly-card object-cover bg-flansly-surface shadow-lg" />
+                        <img src={resolveImageUrl(creator.profileImageUrl) || '/flansly_logo.png'} alt={creator.displayName} className="w-28 h-28 rounded-full border-4 border-flansly-card object-cover bg-flansly-surface shadow-lg" />
                         <div className="mb-2">
                             <h2 className="text-2xl font-extrabold text-[#F9F9F9] font-['Manrope'] tracking-tight flex items-center gap-2 justify-center sm:justify-start">
                                 {creator.displayName}

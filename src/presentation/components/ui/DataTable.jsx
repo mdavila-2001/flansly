@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 export const DataTable = ({ columns, data }) => {
     return (
         <div className="w-full overflow-x-auto rounded-xl border border-flansly-card bg-flansly-card">
@@ -34,4 +36,9 @@ export const DataTable = ({ columns, data }) => {
             </table>
         </div>
     );
+};
+
+DataTable.propTypes = {
+    columns: PropTypes.array.isRequired,
+    data: PropTypes.array.isRequired
 };

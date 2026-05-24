@@ -16,7 +16,7 @@ export const Switch = forwardRef(
                     inline-flex items-center gap-3 cursor-pointer select-none
                     ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
                 `}>
-                    <div className="relative flex-shrink-0">
+                    <div className="relative shrink-0">
                         <input
                             ref={ref}
                             type="checkbox"
@@ -39,20 +39,20 @@ export const Switch = forwardRef(
                                 transition-all duration-300 ease-in-out
                                 shadow-md
                                 ${checked
-                                    ? 'left-[22px] bg-flansly-flan scale-110'
+                                    ? 'left-5.5 bg-flansly-flan scale-110'
                                     : 'left-0.5 bg-flansly-muted scale-100'
                                 }
                             `} />
                         </div>
                     </div>
                     {label && (
-                        <span className="text-flansly-flan/90 text-sm font-[var(--font-inter)]">
+                        <span className="text-flansly-flan/90 text-sm font(--font-inter)">
                             {label}
                         </span>
                     )}
                 </label>
                 {error && (
-                    <span className="text-flansly-error text-xs font-[var(--font-inter)] animate-[slide-in_0.2s_ease]">
+                    <span className="text-flansly-error text-xs font(--font-inter) animate-[slide-in_0.2s_ease]">
                         {error}
                     </span>
                 )}

@@ -20,6 +20,16 @@ export class FollowerRepository {
         const response = await api.get('/follower/feed');
         return response.data;
     }
+
+    async donate(creatorId, quantity) {
+        const response = await api.post('/follower/donate', { creatorId, quantity });
+        return response.data;
+    }
+
+    async createComment(postId, content) {
+        const response = await api.post(`/follower/posts/${postId}/comments`, { content });
+        return response.data;
+    }
 }
 
 export const followerRepository = new FollowerRepository();

@@ -34,11 +34,14 @@ export const CreatorProfile = () => {
     const avatarInputRef = useRef(null);
     const bannerInputRef = useRef(null);
 
-    // Sincronizar estados locales cuando cambie la meta persistida
+    // Sincronizar estados locales cuando cambie la meta persistida de forma asíncrona para evitar cascading renders
     useEffect(() => {
         if (activeGoal) {
-            setGoalTitle(activeGoal.title);
-            setGoalDescription(activeGoal.description);
+            const timer = setTimeout(() => {
+                setGoalTitle(activeGoal.title);
+                setGoalDescription(activeGoal.description);
+            }, 0);
+            return () => clearTimeout(timer);
         }
     }, [activeGoal]);
 

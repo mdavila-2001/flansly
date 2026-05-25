@@ -14,8 +14,11 @@ import { Register } from './presentation/pages/Register';
 import { CreatorDashboard } from './presentation/pages/CreatorDashboard';
 import { CreatorProfile } from './presentation/pages/CreatorProfile';
 
-// Componentes Mock Temporales para Validar el Enrutamiento de Seguidores (US4 - Pendiente)
-const MockFeed = () => <div className="text-flansly-flan text-xl font-bold font-['Manrope']">Muro de Publicaciones Desbloqueadas (US4)</div>;
+// Páginas Reales de Seguidores (US4)
+import { FollowerFeed } from './presentation/pages/follower/FollowerFeed';
+import { ExploreCreators } from './presentation/pages/follower/ExploreCreators';
+import { CreatorProfileView } from './presentation/pages/follower/CreatorProfileView';
+import { FollowerFavorites } from './presentation/pages/follower/FollowerFavorites';
 
 function App() {
     return (
@@ -40,8 +43,10 @@ function App() {
 
                             {/* Sub-Zona Exclusiva para Seguidores/Donadores (US4) */}
                             <Route element={<RoleRoute allowedRoles={['follower']} />}>
-                                <Route path="/follower/feed" element={<MockFeed />} />
-                                <Route path="/follower/favorites" element={<div className="text-flansly-flan">Listado de Favoritos (US4)</div>} />
+                                <Route path="/follower/feed" element={<FollowerFeed />} />
+                                <Route path="/follower/explore" element={<ExploreCreators />} />
+                                <Route path="/follower/creator/:id" element={<CreatorProfileView />} />
+                                <Route path="/follower/favorites" element={<FollowerFavorites />} />
                             </Route>
 
                         </Route>

@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { CakeSlice } from 'lucide-react';
 
 export const CommentsList = ({ comments = [] }) => {
     if (!comments || comments.length === 0) {
@@ -17,7 +18,7 @@ export const CommentsList = ({ comments = [] }) => {
                     className="p-3.5 bg-flansly-dark/40 border border-flansly-surface/20 rounded-2xl flex gap-3 text-xs leading-relaxed"
                 >
                     <div className="w-7 h-7 rounded-full bg-flansly-surface shrink-0 flex items-center justify-center font-bold shadow-sm">
-                        🍮
+                        <CakeSlice size={14} className="text-flansly-flan" />
                     </div>
                     <div className="flex-1 min-w-0">
                         <div className="flex justify-between items-center mb-1 gap-2">

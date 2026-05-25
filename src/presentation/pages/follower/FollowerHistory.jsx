@@ -95,7 +95,6 @@ export const FollowerHistory = () => {
 
     return (
         <div className="max-w-7xl mx-auto space-y-6 text-[#F9F9F9]">
-            {/* Cabecera de la Pantalla */}
             <div className="border-b border-flansly-surface/30 pb-6">
                 <h2 className="text-3xl font-extrabold text-[#F9F9F9] font-['Manrope'] tracking-tight flex items-center gap-2">
                     📈 Historial de Inversiones
@@ -105,14 +104,12 @@ export const FollowerHistory = () => {
                 </p>
             </div>
 
-            {/* Alerta de Error */}
             {error && (
                 <div className="bg-flansly-error/10 border border-flansly-error/30 text-flansly-error rounded-xl p-4 text-xs animate-[slide-in_0.2s_ease]">
                     ⚠️ {error}
                 </div>
             )}
 
-            {/* Barra de Filtros Triples */}
             <div className="bg-[#1E1E1E] rounded-[2rem] p-6 border border-[#2A2A2A] shadow-xl">
                 <h3 className="text-sm font-bold text-flansly-flan uppercase tracking-wider font-['Manrope'] mb-4 flex items-center gap-2">
                     <Search size={16} className="text-flansly-caramel" />
@@ -170,9 +167,7 @@ export const FollowerHistory = () => {
                 </form>
             </div>
 
-            {/* KPIs de Inversiones Acumuladas */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {/* Flanes Donados Acumulados */}
                 <div className="bg-[#1E1E1E]/80 backdrop-blur-md border border-[#2A2A2A] rounded-3xl p-6 shadow-xl flex items-center gap-5 relative overflow-hidden group">
                     <div className="absolute w-32 h-32 bg-[#B45309]/5 rounded-full blur-2xl top-1/2 -right-4 -translate-y-1/2 pointer-events-none" />
                     <div className="p-4 bg-flansly-caramel/10 text-flansly-flan rounded-2xl shrink-0">
@@ -186,7 +181,6 @@ export const FollowerHistory = () => {
                     </div>
                 </div>
 
-                {/* Total Capital Invertido */}
                 <div className="bg-[#1E1E1E]/80 backdrop-blur-md border border-[#2A2A2A] rounded-3xl p-6 shadow-xl flex items-center gap-5 relative overflow-hidden group">
                     <div className="absolute w-32 h-32 bg-emerald-500/5 rounded-full blur-2xl top-1/2 -right-4 -translate-y-1/2 pointer-events-none" />
                     <div className="p-4 bg-emerald-500/10 text-emerald-400 rounded-2xl shrink-0">
@@ -201,7 +195,6 @@ export const FollowerHistory = () => {
                 </div>
             </div>
 
-            {/* Listado Principal de Transacciones de Inversión */}
             <div className="space-y-4">
                 <h3 className="text-lg font-bold text-white font-manrope border-b border-flansly-surface/30 pb-3 flex items-center gap-2">
                     <Heart size={18} className="text-flansly-caramel animate-pulse" /> Historial de Transacciones

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useFollower } from '../../../application/hooks/useFollower';
 import { PostCard } from '../../components/features/PostCard';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, AlertTriangle, CakeSlice } from 'lucide-react';
 
 export const FollowerFeed = () => {
     const { feed, isLoading, error, fetchFeed } = useFollower();
@@ -26,7 +26,7 @@ export const FollowerFeed = () => {
     if (error) {
         return (
             <div className="max-w-2xl mx-auto p-6 bg-flansly-card/40 border border-flansly-error/20 rounded-2xl text-center text-flansly-error font-inter">
-                ⚠️ {error}
+                <AlertTriangle size={14} /> {error}
             </div>
         );
     }
@@ -35,7 +35,7 @@ export const FollowerFeed = () => {
         <div className="space-y-6 max-w-2xl mx-auto">
             <header>
                 <h2 className="text-3xl font-extrabold text-[#F9F9F9] font-manrope tracking-tight flex items-center gap-2">
-                    🍮 Muro de tus Creadores
+                    <CakeSlice size={20} className="text-flansly-caramel" /> Muro de tus Creadores
                 </h2>
                 <p className="text-flansly-muted text-sm mt-1">
                     Visualiza las publicaciones exclusivas de los creadores a los que has apoyado.

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFollower } from '../../../application/hooks/useFollower';
-import { Star, Heart } from 'lucide-react';
+import { Star, Heart, AlertTriangle } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { resolveImageUrl } from '../../../core/utils/image.utils';
 import { CardSkeleton } from '../../components/ui/CardSkeleton';
@@ -33,7 +33,7 @@ export const FollowerFavorites = () => {
     if (error) {
         return (
             <div className="max-w-300 mx-auto px-4 md:px-0 py-20 text-center text-flansly-error font-['Inter']">
-                ⚠️ {error}
+                <AlertTriangle size={14} /> {error}
             </div>
         );
     }
@@ -56,7 +56,6 @@ export const FollowerFavorites = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {favorites.map((creator) => (
                         <div key={creator.id} className="relative bg-flansly-card border border-flansly-surface/30 rounded-2xl overflow-hidden group flex flex-col justify-between shadow-lg">
-                            {/* Banner Miniatura */}
                             <div className="w-full h-24 bg-flansly-surface overflow-hidden relative">
                                 {creator.bannerImageUrl && (
                                     <img 
@@ -65,7 +64,6 @@ export const FollowerFavorites = () => {
                                         className="w-full h-full object-cover" 
                                     />
                                 )}
-                                {/* Botón de Favorito Flotante */}
                                 <button 
                                     onClick={(e) => { e.stopPropagation(); handleToggleFavorite(creator.id); }}
                                     className="absolute top-3 right-3 p-2 rounded-full bg-flansly-dark/60 border border-flansly-surface/60 text-flansly-flan transition-colors cursor-pointer z-20 backdrop-blur-sm"
@@ -75,7 +73,6 @@ export const FollowerFavorites = () => {
                                 </button>
                             </div>
 
-                            {/* Cuerpo de Tarjeta */}
                             <div className="p-5 flex flex-col items-center -mt-10 relative z-10 flex-1">
                                 <img 
                                     src={resolveImageUrl(creator.profileImageUrl) || '/flansly_logo.png'} 

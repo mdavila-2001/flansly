@@ -120,7 +120,6 @@ export const FileInput = forwardRef(
                     </div>
                 </div>
 
-                {/* Lista de archivos */}
                 {files.length > 0 && (
                     <div className="flex flex-col gap-2 mt-1">
                         {files.map((file, index) => (

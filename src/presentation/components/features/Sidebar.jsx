@@ -2,17 +2,17 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../../application/hooks/useAuth';
-import { LogOut, Menu, X } from 'lucide-react';
+import { LogOut, Menu, X, BarChart3, UserCircle, Search, CakeSlice, Star } from 'lucide-react';
 
 const MENU_ITEMS = {
     creator: [
-        { to: '/creator/dashboard', label: '📊 Dashboard Analítico' },
-        { to: '/creator/profile', label: '👤 Editar Mi Perfil' }
+        { to: '/creator/dashboard', label: 'Dashboard Analítico', icon: BarChart3 },
+        { to: '/creator/profile', label: 'Editar Mi Perfil', icon: UserCircle }
     ],
     follower: [
-        { to: '/follower/explore', label: '🔍 Explorar Creadores' },
-        { to: '/follower/feed', label: '🍮 Muro De Flanes' },
-        { to: '/follower/favorites', label: '⭐ Mis Creadores' }
+        { to: '/follower/explore', label: 'Explorar Creadores', icon: Search },
+        { to: '/follower/feed', label: 'Muro De Flanes', icon: CakeSlice },
+        { to: '/follower/favorites', label: 'Mis Creadores', icon: Star }
     ]
 };
 
@@ -29,7 +29,6 @@ export const Sidebar = () => {
 
     return (
         <>
-            {/* Botón Hamburguesa - Flotante y visible solo en dispositivos móviles */}
             <button
                 onClick={handleToggle}
                 className="md:hidden fixed top-4 left-4 z-40 p-2.5 rounded-xl bg-flansly-card border border-flansly-surface/60 text-flansly-flan shadow-[0_4px_20px_rgba(0,0,0,0.4)] cursor-pointer hover:bg-flansly-surface/60 transition-colors"
@@ -39,7 +38,6 @@ export const Sidebar = () => {
                 <Menu size={20} />
             </button>
 
-            {/* Fondo Oscuro Semi-transparente (Backdrop) con Blur - Visible solo en móviles cuando está abierto */}
             {isOpen && (
                 <button
                     type="button"
@@ -49,7 +47,6 @@ export const Sidebar = () => {
                 />
             )}
 
-            {/* Sidebar Lateral */}
             <aside
                 className={`
                     w-70 fixed top-0 bottom-0 left-0 h-screen bg-flansly-card border-r border-flansly-surface/40 
@@ -59,7 +56,6 @@ export const Sidebar = () => {
                 `}
             >
                 <div className="space-y-8 relative">
-                    {/* Botón Cerrar (X) - Visible solo en móviles */}
                     <button
                         onClick={handleClose}
                         className="md:hidden absolute -top-2 right-0 text-flansly-muted hover:text-flansly-flan p-1.5 rounded-xl hover:bg-flansly-surface/40 transition-colors cursor-pointer"
@@ -69,19 +65,20 @@ export const Sidebar = () => {
                         <X size={18} />
                     </button>
 
-                    {/* Header Marca */}
                     <div className="flex items-center gap-3">
-                        <span className="text-2xl animate-[checkmark-pop_0.4s_ease]">🍮</span>
+                        <span className="text-flansly-flan animate-[checkmark-pop_0.4s_ease]">
+                            <CakeSlice size={24} />
+                        </span>
                         <div>
                             <h1 className="text-lg font-bold text-flansly-flan font-['Manrope'] tracking-tight">Flansly</h1>
                             <span className="text-[10px] font-mono text-flansly-caramel uppercase tracking-widest font-semibold">{user?.role}</span>
                         </div>
                     </div>
 
-                    {/* Navegación Dinámica según el Rol */}
                     <nav className="flex flex-col gap-2 font-['Inter'] text-sm">
                         {menuLinks.map((link) => {
                             const isActive = location.pathname === link.to;
+                            const IconComponent = link.icon;
                             return (
                                 <Link
                                     key={link.to}
@@ -95,6 +92,7 @@ export const Sidebar = () => {
                                         }
                                     `}
                                 >
+                                    <IconComponent size={16} />
                                     {link.label}
                                 </Link>
                             );
@@ -102,7 +100,6 @@ export const Sidebar = () => {
                     </nav>
                 </div>
 
-                {/* Perfil Inferior & Botón de Logout */}
                 <div className="border-t border-flansly-surface/40 pt-4 flex items-center justify-between">
                     <div className="min-w-0 pr-2">
                         <p className="text-sm font-semibold text-flansly-flan truncate">{user?.displayName}</p>

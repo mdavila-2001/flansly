@@ -28,18 +28,14 @@ export const useAuth = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [authError, setAuthError] = useState(null);
 
-    // Función utilitaria para parsear de manera robusta los errores del backend (Express)
     const parseError = (err) => {
         const rawError = err.response?.data?.error;
         if (Array.isArray(rawError)) {
-            // Maneja arrays de mensajes de error de validación de Joi
             return rawError.join(', ');
         }
         if (typeof rawError === 'string') {
-            // Maneja mensajes de error de reglas de negocio directas
             return rawError;
         }
-        // Fallback por defecto si no viene de la forma Express esperada
         return err.response?.data?.message || err.message || 'Error inesperado de conexión con el servidor.';
     };
 
@@ -49,7 +45,6 @@ export const useAuth = () => {
         try {
             const responseData = await authRepository.login(identity, password);
 
-            // CORTAFUEGOS DE CONTRATO: Extraer propiedad exacta del token
             const token = responseData?.token || responseData?.data?.token || responseData?.result?.token || responseData?.result;
 
             if (!token || typeof token !== 'string') {

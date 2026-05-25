@@ -5,7 +5,7 @@ import { Input } from '../components/ui/Input';
 import { Textarea } from '../components/ui/Textarea';
 import { FileInput } from '../components/ui/FileInput';
 import { Button } from '../components/ui/Button';
-import { Palette, Target, Save, CheckCircle } from 'lucide-react';
+import { Palette, Target, Save, CheckCircle, Settings, AlertTriangle } from 'lucide-react';
 import { resolveImageUrl } from '../../core/utils/image.utils';
 
 export const CreatorProfile = () => {
@@ -15,7 +15,8 @@ export const CreatorProfile = () => {
         isLoading, 
         creatorError, 
         handleUpdateProfile, 
-        handleUpdateGoal 
+        handleUpdateGoal,
+        fetchActiveGoal
     } = useCreator();
 
     // Estados para Perfil Visual
@@ -29,6 +30,7 @@ export const CreatorProfile = () => {
     // Estados para Metas de Apoyo
     const [goalTitle, setGoalTitle] = useState(activeGoal?.title || '');
     const [goalDescription, setGoalDescription] = useState(activeGoal?.description || '');
+    const [goalTarget, setGoalTarget] = useState(activeGoal?.targetFlans || 50);
     const [goalSuccess, setGoalSuccess] = useState(false);
 
     // Refs para File Inputs
@@ -41,10 +43,15 @@ export const CreatorProfile = () => {
             const timer = setTimeout(() => {
                 setGoalTitle(activeGoal.title);
                 setGoalDescription(activeGoal.description);
+                setGoalTarget(activeGoal.targetFlans || 50);
             }, 0);
             return () => clearTimeout(timer);
         }
     }, [activeGoal]);
+
+    useEffect(() => {
+        fetchActiveGoal();
+    }, [fetchActiveGoal]);
 
     // Manejar cambios e previsualizaciones instantáneas
     const handleAvatarChange = (e) => {
@@ -90,12 +97,13 @@ export const CreatorProfile = () => {
     const handleSubmitGoal = async (e) => {
         e.preventDefault();
         setGoalSuccess(false);
-        if (!goalTitle.trim() || !goalDescription.trim()) return;
+        if (!goalTitle.trim() || !goalDescription.trim() || !goalTarget) return;
 
         try {
             await handleUpdateGoal({
                 title: goalTitle.trim(),
-                description: goalDescription.trim()
+                description: goalDescription.trim(),
+                targetFlans: parseInt(goalTarget, 10)
             });
             setGoalSuccess(true);
             setTimeout(() => setGoalSuccess(false), 4000);
@@ -106,20 +114,18 @@ export const CreatorProfile = () => {
 
     return (
         <div className="space-y-8 max-w-4xl mx-auto">
-            {/* Header Perfil */}
             <div className="border-b border-flansly-surface/30 pb-6">
                 <h2 className="text-3xl font-extrabold text-[#F9F9F9] font-['Manrope'] tracking-tight flex items-center gap-2">
-                    ⚙️ Configuración del Canal
+                    <Settings size={22} className="text-flansly-caramel" /> Configuración del Canal
                 </h2>
                 <p className="text-flansly-muted text-sm mt-1">
                     Personaliza la identidad visual de tu marca y define tus incentivos de recaudación.
                 </p>
             </div>
 
-            {/* Alerta de Errores */}
             {creatorError && (
                 <div className="bg-flansly-error/10 border border-flansly-error/30 text-flansly-error rounded-xl p-4 text-xs animate-[slide-in_0.2s_ease]">
-                    ⚠️ {creatorError}
+                    <AlertTriangle size={14} /> {creatorError}
                 </div>
             )}
 
@@ -136,14 +142,12 @@ export const CreatorProfile = () => {
                 )}
 
                 <form onSubmit={handleSubmitProfile} className="space-y-6">
-                    {/* Estructura Estética Estricta: Banner rectangular y Foto circular flotante superpuesta */}
                     <div className="space-y-2">
                         <label className="text-flansly-muted text-sm font-['Inter'] tracking-wide block">
                             Diseño de Cabecera y Avatar
                         </label>
                         
                         <div className="relative mb-20">
-                            {/* Rectángulo de Banner */}
                             <div className="w-full h-48 bg-flansly-dark/60 rounded-2xl overflow-hidden relative border border-flansly-surface/30 flex items-center justify-center">
                                 {bannerPreview ? (
                                     <img 
@@ -168,7 +172,6 @@ export const CreatorProfile = () => {
                         </div>
                     </div>
 
-                    {/* Doble FileInput Autónomo */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
                         <FileInput
                             ref={avatarInputRef}
@@ -187,7 +190,6 @@ export const CreatorProfile = () => {
                         />
                     </div>
 
-                    {/* Nombre a Mostrar */}
                     <div className="pt-2">
                         <Input
                             label="Nombre a Mostrar (Display Name)"
@@ -245,6 +247,17 @@ export const CreatorProfile = () => {
                         onChange={(e) => setGoalDescription(e.target.value)}
                         disabled={isLoading}
                         maxLength={500}
+                        required
+                    />
+
+                    <Input
+                        label="Meta de Flanes a Recaudar"
+                        type="number"
+                        placeholder="Ej. 50"
+                        value={goalTarget}
+                        onChange={(e) => setGoalTarget(e.target.value)}
+                        disabled={isLoading}
+                        min="1"
                         required
                     />
 

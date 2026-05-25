@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { AuthContext } from './AuthContext';
+import { authRepository } from '../../data/repositories/auth.repository';
 
 const decodeJwt = (token) => {
     try {
@@ -26,6 +27,28 @@ export const AuthProvider = ({ children }) => {
         return savedUser ? JSON.parse(savedUser) : null;
     });
 
+    const logout = useCallback(() => {
+        setToken(null);
+        setUser(null);
+    }, []);
+
+    useEffect(() => {
+        if (token) {
+            const fetchUserData = async () => {
+                try {
+                    const userData = await authRepository.getMe();
+                    setUser(userData);
+                } catch (err) {
+                    console.error('Error al sincronizar datos del perfil con /me:', err);
+                    if (err.response?.status === 401) {
+                        logout();
+                    }
+                }
+            };
+            fetchUserData();
+        }
+    }, [token, logout]);
+
     useEffect(() => {
         if (token && user) {
             localStorage.setItem('flansly_token', token);
@@ -47,11 +70,6 @@ export const AuthProvider = ({ children }) => {
             displayName: decoded.displayName,
             role: decoded.role
         });
-    }, []);
-
-    const logout = useCallback(() => {
-        setToken(null);
-        setUser(null);
     }, []);
 
     const value = useMemo(() => ({

@@ -47,7 +47,6 @@ export const useCreator = () => {
         setCreatorError(null);
         try {
             const updatedUser = await creatorRepository.updateProfile(formData);
-            // Sincronizar usuario guardado en localStorage para reflejar los cambios en el Header/Sidebar
             const savedUser = localStorage.getItem('flansly_user');
             if (savedUser) {
                 const userObj = JSON.parse(savedUser);
@@ -70,12 +69,11 @@ export const useCreator = () => {
         }
     }, []);
 
-    const handleUpdateGoal = useCallback(async ({ title, description }) => {
+    const handleUpdateGoal = useCallback(async ({ title, description, targetFlans }) => {
         setIsLoading(true);
         setCreatorError(null);
         try {
-            const goalData = await creatorRepository.updateGoal({ title, description });
-            // Guardar meta en estado y en localStorage de forma persistente
+            const goalData = await creatorRepository.updateGoal({ title, description, targetFlans });
             setActiveGoal(goalData);
             localStorage.setItem('flansly_creator_goal', JSON.stringify(goalData));
             return goalData;
@@ -89,15 +87,32 @@ export const useCreator = () => {
         }
     }, []);
 
+    const fetchActiveGoal = useCallback(async () => {
+        setIsLoading(true);
+        setCreatorError(null);
+        try {
+            const data = await creatorRepository.getActiveGoal();
+            setActiveGoal(data || null);
+            if (data) {
+                localStorage.setItem('flansly_creator_goal', JSON.stringify(data));
+            } else {
+                localStorage.removeItem('flansly_creator_goal');
+            }
+            return data;
+        } catch (err) {
+            console.error('Error en fetchActiveGoal:', err);
+            setCreatorError(parseError(err));
+        } finally {
+            setIsLoading(false);
+        }
+    }, []);
+
     const handleCreatePost = useCallback(async (formData) => {
         setIsLoading(true);
         setCreatorError(null);
         try {
             const newPost = await creatorRepository.createPost(formData);
-            
-            // CORTAFUEGOS REACTIVO DE FEED: Inyectar al inicio de posts de forma reactiva
             setPosts(prev => [newPost, ...prev]);
-            
             return newPost;
         } catch (err) {
             console.error('Error en handleCreatePost:', err);
@@ -133,6 +148,7 @@ export const useCreator = () => {
         fetchCreatorPosts,
         handleUpdateProfile,
         handleUpdateGoal,
+        fetchActiveGoal,
         handleCreatePost,
         fetchReports
     };

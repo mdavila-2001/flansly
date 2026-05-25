@@ -104,7 +104,6 @@ export const CreatorProfileView = () => {
 
     return (
         <div className="space-y-6 max-w-4xl mx-auto">
-            {/* Cabecera del Creador - Portada y Perfil */}
             <div className="bg-flansly-card rounded-2xl border border-flansly-surface/30 overflow-hidden relative shadow-xl">
                 <div className="w-full h-48 bg-flansly-surface relative">
                     {creator.bannerImageUrl && <img src={resolveImageUrl(creator.bannerImageUrl)} alt="Banner" className="w-full h-full object-cover" />}
@@ -127,8 +126,6 @@ export const CreatorProfileView = () => {
                     </Button>
                 </div>
             </div>
-
-            {/* Tarjeta de Meta de Soporte del Canal */}
             {supportGoal && (
                 <div className="bg-flansly-caramel/10 border border-flansly-caramel/30 rounded-2xl p-6 flex gap-4 shadow-[0_0_20px_rgba(180,83,9,0.03)]">
                     <div className="p-3 bg-flansly-caramel/20 text-flansly-caramel rounded-xl h-fit shrink-0"><Target size={24} /></div>
@@ -158,14 +155,12 @@ export const CreatorProfileView = () => {
                 </div>
             )}
 
-            {/* Listado de Publicaciones Exclusivas con Paywall reactivo */}
             <div className="space-y-4 relative">
                 <h3 className="text-xl font-bold text-[#F9F9F9] font-['Manrope'] tracking-tight border-b border-flansly-surface/30 pb-2">Publicaciones Exclusivas</h3>
                 
                 {renderExclusiveContent()}
             </div>
 
-            {/* Modal de Simulación de Donación Modularizado (SRP / SOLID) */}
             <DonateModal 
                 isOpen={isDonateModalOpen} 
                 onClose={() => setIsDonateModalOpen(false)} 

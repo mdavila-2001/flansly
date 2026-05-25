@@ -8,7 +8,6 @@ export const PostInteractionCard = ({ post, creator, onCommentSubmit, isActionLo
         <div className="bg-flansly-card rounded-[2rem] border border-flansly-surface/30 overflow-hidden flex flex-col shadow-lg">
             <PostCard post={{ ...post, creator }} />
             
-            {/* Zona de Comentarios Privados (Desbloqueado post-Donación) */}
             <div className="p-6 bg-flansly-card/40 border-t border-flansly-surface/20 space-y-4">
                 <h5 className="text-xs font-bold text-flansly-flan uppercase tracking-wider font-['Manrope']">
                     Comentarios de Patrocinadores

@@ -5,7 +5,9 @@ export const useFollower = () => {
     const [creators, setCreators] = useState([]);
     const [currentProfile, setCurrentProfile] = useState(null);
     const [feed, setFeed] = useState([]);
+    const [history, setHistory] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [isHistoryLoading, setIsHistoryLoading] = useState(false);
     const [error, setError] = useState(null);
 
     const fetchCreators = useCallback(async () => {
@@ -38,19 +40,22 @@ export const useFollower = () => {
         try {
             await followerRepository.toggleFavorite(creatorId);
             setCreators(prev => prev.map(c => c.id === creatorId ? { ...c, isFavorite: !c.isFavorite } : c));
-            if (currentProfile && currentProfile.creator.id === creatorId) {
-                setCurrentProfile(prev => ({
-                    ...prev,
-                    creator: {
-                        ...prev.creator,
-                        isFavorite: !prev.creator.isFavorite
-                    }
-                }));
-            }
+            setCurrentProfile(prev => {
+                if (prev && prev.creator.id === creatorId) {
+                    return {
+                        ...prev,
+                        creator: {
+                            ...prev.creator,
+                            isFavorite: !prev.creator.isFavorite
+                        }
+                    };
+                }
+                return prev;
+            });
         } catch (err) {
             console.error('Error al modificar favoritos:', err);
         }
-    }, [currentProfile]);
+    }, []);
 
     const fetchFeed = useCallback(async () => {
         setIsLoading(true);
@@ -65,15 +70,59 @@ export const useFollower = () => {
         }
     }, []);
 
+    const handleDonate = useCallback(async (creatorId, quantity) => {
+        setIsLoading(true);
+        setError(null);
+        try {
+            await followerRepository.donate(creatorId, quantity);
+            // Recargar el perfil para actualizar el estado de "hasDonated" y desbloquear posts al instante
+            await fetchProfile(creatorId);
+        } catch (err) {
+            setError(err.response?.data?.message || 'Error al procesar la donación.');
+            throw err;
+        } finally {
+            setIsLoading(false);
+        }
+    }, [fetchProfile]);
+
+    const markAsDonated = useCallback(() => {
+        setCurrentProfile(prev => {
+            if (!prev) return prev;
+            return {
+                ...prev,
+                hasDonated: true
+            };
+        });
+    }, []);
+
+    const fetchHistory = useCallback(async (startDate, endDate, creatorName) => {
+        setIsHistoryLoading(true);
+        setError(null);
+        try {
+            const data = await followerRepository.getHistory(startDate, endDate, creatorName);
+            setHistory(data || []);
+            return data;
+        } catch (err) {
+            setError(err.response?.data?.message || 'Error al cargar el historial de inversiones.');
+        } finally {
+            setIsHistoryLoading(false);
+        }
+    }, []);
+
     return {
         creators,
         currentProfile,
         feed,
+        history,
         isLoading,
+        isHistoryLoading,
         error,
         fetchCreators,
         fetchProfile,
         handleToggleFavorite,
-        fetchFeed
+        fetchFeed,
+        handleDonate,
+        markAsDonated,
+        fetchHistory
     };
 };

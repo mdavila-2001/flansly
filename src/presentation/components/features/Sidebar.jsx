@@ -10,6 +10,7 @@ const MENU_ITEMS = {
         { to: '/creator/profile', label: '👤 Editar Mi Perfil' }
     ],
     follower: [
+        { to: '/follower/explore', label: '🔍 Explorar Creadores' },
         { to: '/follower/feed', label: '🍮 Muro De Flanes' },
         { to: '/follower/favorites', label: '⭐ Mis Creadores' }
     ]

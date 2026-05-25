@@ -8,33 +8,52 @@ import { Modal } from '../../components/ui/Modal';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
 import { Star, Target } from 'lucide-react';
+import { resolveImageUrl } from '../../../core/utils/image.utils';
 
 export const CreatorProfileView = () => {
     const { id } = useParams();
-    const { currentProfile, isLoading, error, fetchProfile, handleToggleFavorite } = useFollower();
+    const { 
+        currentProfile, 
+        isLoading, 
+        error, 
+        fetchProfile, 
+        handleToggleFavorite,
+        handleDonate
+    } = useFollower();
     const [isDonateModalOpen, setIsDonateModalOpen] = useState(false);
     const [flansQuantity, setFlansQuantity] = useState(1);
+
+    // Adaptador de firma: convierte payload de objeto { creatorId, quantity } al formato de argumentos (creatorId, quantity)
+    const donateFlans = async ({ creatorId, quantity }) => {
+        return await handleDonate(creatorId, quantity);
+    };
 
     useEffect(() => {
         fetchProfile(id);
     }, [id, fetchProfile]);
 
+    const handleDonateSubmit = async (quantity) => {
+        try {
+            console.log("🍮 ENVIANDO DONACIÓN AL HORNO:", { creatorId: id, quantity });
+            
+            // 1. Asegurar el contrato correcto envolviendo el payload como lo exige la API
+            await donateFlans({ creatorId: id, quantity: Number(quantity) });
+            
+            console.log("✅ DONACIÓN EXITOSA. REFRESCANDO MURO...");
+            
+            // 2. Recuperar el perfil actualizado para quitar el Paywall difuminado
+            await fetchProfile(id); 
+            setIsDonateModalOpen(false);
+        } catch (err) {
+            console.error("❌ CRASH CRÍTICO EN HANDLE_DONATE_SUBMIT:", err);
+            alert(`Error al procesar los flanes: ${err.response?.data?.error || err.message || 'Error interno del servidor'}`);
+        }
+    };
+
     if (isLoading) return <div className="text-center py-20 text-flansly-flan font-mono animate-pulse">Abriendo compuertas del perfil...</div>;
     if (error || !currentProfile) return <div className="text-center py-20 text-flansly-error font-['Inter']">⚠️ {error || 'No se halló el perfil.'}</div>;
 
     const { creator, supportGoal, hasDonated, posts } = currentProfile;
-
-    const resolveImageUrl = (url) => {
-        if (!url) return '';
-        if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
-            return url;
-        }
-        if (url === '/flansly_logo.png') {
-            return url;
-        }
-        const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-        return `${baseUrl}${url}`;
-    };
 
     return (
         <div className="space-y-6 max-w-4xl mx-auto">
@@ -103,7 +122,7 @@ export const CreatorProfileView = () => {
                     </div>
                     <div className="flex gap-3 justify-end mt-4">
                         <Button variant="secondary" onClick={() => setIsDonateModalOpen(false)}>Cancelar</Button>
-                        <Button variant="primary" onClick={() => { alert('Inyectando donación simbólica al backend...'); setIsDonateModalOpen(false); }}>Confirmar Apoyo</Button>
+                        <Button variant="primary" onClick={() => handleDonateSubmit(flansQuantity)}>Confirmar Apoyo</Button>
                     </div>
                 </div>
             </Modal>

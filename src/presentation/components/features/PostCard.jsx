@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { Calendar } from 'lucide-react';
+import { resolveImageUrl } from '../../../core/utils/image.utils';
 
 export const PostCard = ({ post }) => {
     const formattedDate = new Date(post.createdAt).toLocaleDateString('es-BO', {
@@ -7,21 +8,6 @@ export const PostCard = ({ post }) => {
         month: 'long',
         year: 'numeric'
     });
-
-    // Helper dinámico para inyectar la URL del backend a recursos estáticos subidos
-    const resolveImageUrl = (url) => {
-        if (!url) return '';
-        // Si ya es una URL completa (http/https) o un base64, lo deja pasar directo
-        if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
-            return url;
-        }
-        // Si es el asset por defecto del logo local de la carpeta public del front, no concatenar backend
-        if (url === '/flansly_logo.png') {
-            return url;
-        }
-        const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-        return `${baseUrl}${url}`;
-    };
 
     return (
         <div className="w-full bg-flansly-card border border-flansly-surface/30 rounded-2xl p-6 flex flex-col gap-4 shadow-[0_4px_20px_rgba(0,0,0,0.2)]">

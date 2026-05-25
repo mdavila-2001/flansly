@@ -18,7 +18,7 @@ export const FollowerFavorites = () => {
 
     if (isLoading) {
         return (
-            <div className="space-y-6 max-w-[1200px] mx-auto px-4 md:px-0">
+            <div className="space-y-6 max-w-300 mx-auto px-4 md:px-0">
                 <header>
                     <h2 className="text-3xl font-extrabold text-white font-manrope tracking-tight flex items-center gap-2">
                         <Heart className="text-flansly-caramel animate-pulse" size={28} fill="var(--color-flansly-caramel)" /> Creadores Favoritos
@@ -32,14 +32,14 @@ export const FollowerFavorites = () => {
 
     if (error) {
         return (
-            <div className="max-w-[1200px] mx-auto px-4 md:px-0 py-20 text-center text-flansly-error font-inter">
+            <div className="max-w-300 mx-auto px-4 md:px-0 py-20 text-center text-flansly-error font-['Inter']">
                 ⚠️ {error}
             </div>
         );
     }
 
     return (
-        <div className="space-y-6 max-w-[1200px] mx-auto px-4 md:px-0">
+        <div className="space-y-6 max-w-300 mx-auto px-4 md:px-0">
             <header>
                 <h2 className="text-3xl font-extrabold text-white font-manrope tracking-tight flex items-center gap-2">
                     <Heart className="text-flansly-caramel animate-pulse" size={28} fill="var(--color-flansly-caramel)" /> Creadores Favoritos

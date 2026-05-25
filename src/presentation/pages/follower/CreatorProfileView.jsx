@@ -26,7 +26,7 @@ export const CreatorProfileView = () => {
         try {
             // DoD #3: Validación defensiva antes de la petición
             const parsedQuantity = Number(flansQuantity);
-            if (!flansQuantity || isNaN(parsedQuantity) || parsedQuantity <= 0 || !Number.isInteger(parsedQuantity)) {
+            if (!flansQuantity || Number.isNaN(parsedQuantity) || parsedQuantity <= 0 || !Number.isInteger(parsedQuantity)) {
                 setDonationError('Por favor ingresa un número entero positivo de flanes.');
                 return;
             }
@@ -50,7 +50,7 @@ export const CreatorProfileView = () => {
             return;
         }
         const parsed = Number(val);
-        if (isNaN(parsed) || parsed < 1 || !Number.isInteger(parsed)) {
+        if (Number.isNaN(parsed) || parsed < 1 || !Number.isInteger(parsed)) {
             setDonationError('La cantidad debe ser un número entero positivo.');
         }
         setFlansQuantity(val);
@@ -62,8 +62,7 @@ export const CreatorProfileView = () => {
 
     if (isLoading) {
         return (
-            <div className="space-y-6 max-w-[1200px] mx-auto px-4 md:px-0 animate-pulse">
-                {/* Banner Skeleton */}
+            <div className="space-y-6 max-w-300 mx-auto px-4 md:px-0 animate-pulse">
                 <div className="w-full h-48 bg-flansly-surface/50 rounded-2xl" />
                 <div className="px-8 pb-6 flex flex-col sm:flex-row items-center sm:items-end justify-between -mt-16 relative z-10 gap-4">
                     <div className="flex flex-col sm:flex-row items-center sm:items-end gap-4 text-center sm:text-left">
@@ -88,7 +87,7 @@ export const CreatorProfileView = () => {
 
     if (error || !currentProfile) {
         return (
-            <div className="max-w-[1200px] mx-auto px-4 md:px-0 py-20 text-center text-flansly-error font-['Inter']">
+            <div className="max-w-300 mx-auto px-4 md:px-0 py-20 text-center text-flansly-error font-['Inter']">
                 ⚠️ {error || 'No se halló el perfil.'}
             </div>
         );
@@ -97,7 +96,7 @@ export const CreatorProfileView = () => {
     const { creator, supportGoal, hasDonated, posts } = currentProfile;
 
     return (
-        <div className="space-y-6 max-w-[1200px] mx-auto px-4 md:px-0">
+        <div className="space-y-6 max-w-300 mx-auto px-4 md:px-0">
             <div className="bg-flansly-card rounded-2xl border border-flansly-surface/30 overflow-hidden relative shadow-xl">
                 <div className="w-full h-48 bg-flansly-surface relative">
                     {creator.bannerImageUrl && <img src={resolveImageUrl(creator.bannerImageUrl)} alt="Banner" className="w-full h-full object-cover" />}
@@ -176,7 +175,7 @@ export const CreatorProfileView = () => {
                         <Button 
                             variant="primary" 
                             onClick={handleConfirmDonate} 
-                            disabled={isActionLoading || !!donationError || flansQuantity === ''}
+                            disabled={isActionLoading || !!donationError || flansQuantity == ''}
                         >
                             {isActionLoading ? 'Procesando...' : 'Confirmar Apoyo'}
                         </Button>

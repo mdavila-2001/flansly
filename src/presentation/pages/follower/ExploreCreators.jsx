@@ -16,7 +16,7 @@ export const ExploreCreators = () => {
 
     if (isLoading) {
         return (
-            <div className="space-y-6 max-w-[1200px] mx-auto px-4 md:px-0">
+            <div className="space-y-6 max-w-300 mx-auto px-4 md:px-0">
                 <div>
                     <h2 className="text-3xl font-extrabold text-white font-['Manrope'] tracking-tight">Explorar Creadores</h2>
                     <p className="text-flansly-muted text-sm mt-1">Descubre mentes brillantes independientes y endulza sus proyectos.</p>
@@ -28,14 +28,14 @@ export const ExploreCreators = () => {
 
     if (error) {
         return (
-            <div className="max-w-[1200px] mx-auto px-4 md:px-0 py-20 text-center text-flansly-error font-['Inter']">
+            <div className="max-w-300 mx-auto px-4 md:px-0 py-20 text-center text-flansly-error font-['Inter']">
                 ⚠️ {error}
             </div>
         );
     }
 
     return (
-        <div className="space-y-6 max-w-[1200px] mx-auto px-4 md:px-0">
+        <div className="space-y-6 max-w-300 mx-auto px-4 md:px-0">
             <div>
                 <h2 className="text-3xl font-extrabold text-white font-['Manrope'] tracking-tight">Explorar Creadores</h2>
                 <p className="text-flansly-muted text-sm mt-1">Descubre mentes brillantes independientes y endulza sus proyectos.</p>

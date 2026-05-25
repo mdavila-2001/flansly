@@ -122,8 +122,7 @@ export const CreatorProfile = () => {
                 </div>
             )}
 
-            {/* SECCIÓN 1: Formulario Perfil Visual */}
-            <div className="bg-[#1E1E1E] rounded-[2rem] p-6 md:p-8 border border-[#2A2A2A] shadow-xl">
+            <div className="bg-flansly-card rounded-4xl p-6 md:p-8 border border-flansly-surface/30 shadow-xl">
                 <h3 className="text-lg font-bold text-flansly-flan font-['Manrope'] mb-6 flex items-center gap-2">
                     <Palette size={18} className="text-flansly-caramel" />
                     Identidad Visual del Creador
@@ -156,13 +155,12 @@ export const CreatorProfile = () => {
                                 )}
                             </div>
 
-                            {/* Foto de Perfil circular flotante superpuesta al borde inferior */}
                             <div className="absolute -bottom-14 left-8 z-20">
                                 <div className="relative group">
                                     <img 
                                         src={avatarPreview.startsWith('blob:') || avatarPreview.startsWith('/') ? avatarPreview : `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}${avatarPreview}`} 
                                         alt="Avatar Preview" 
-                                        className="w-28 h-28 rounded-full border-4 border-[#1E1E1E] object-cover shadow-[0_0_20px_rgba(180,83,9,0.3)] bg-flansly-surface ring-2 ring-[#B45309]/50 transition-transform duration-300 hover:scale-105" 
+                                        className="w-28 h-28 rounded-full border-4 border-flansly-surface/30 object-cover shadow-[0_0_20px_rgba(180,83,9,0.3)] bg-flansly-surface ring-2 ring-flansly-caramel/50 transition-transform duration-300 hover:scale-105" 
                                     />
                                 </div>
                             </div>
@@ -215,8 +213,7 @@ export const CreatorProfile = () => {
                 </form>
             </div>
 
-            {/* SECCIÓN 2: Formulario de Metas de Apoyo */}
-            <div className="bg-[#1E1E1E] rounded-[2rem] p-6 md:p-8 border border-[#2A2A2A] shadow-xl">
+            <div className="bg-flansly-card rounded-4xl p-6 md:p-8 border border-flansly-surface/30 shadow-xl">
                 <h3 className="text-lg font-bold text-flansly-flan font-['Manrope'] mb-6 flex items-center gap-2">
                     <Target size={18} className="text-flansly-caramel" />
                     Meta de Apoyo Operativa

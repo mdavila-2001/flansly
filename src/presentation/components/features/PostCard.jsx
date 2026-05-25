@@ -102,8 +102,8 @@ export const PostCard = ({ post }) => {
                         />
                         <div className="flex items-center justify-between mt-1">
                             {toastMessage ? (
-                                <div className="flex items-center gap-2 px-3 py-2 bg-emerald-500/10 border border-emerald-500/30 text-[#86efac] rounded-xl text-xs font-semibold animate-[slide-in_0.2s_ease-out]">
-                                    <CheckCircle size={14} className="text-[#86efac]" />
+                                <div className="flex items-center gap-2 px-3 py-2 bg-flansly-success/10 border border-flansly-success/30 text-flansly-success rounded-xl text-xs font-semibold animate-[slide-in_0.2s_ease-out]">
+                                    <CheckCircle size={14} className="text-flansly-success" />
                                     <span>{toastMessage}</span>
                                 </div>
                             ) : (

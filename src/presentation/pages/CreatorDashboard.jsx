@@ -81,7 +81,7 @@ export const CreatorDashboard = () => {
 
     // Asignación de insignias estéticas según el nombre del seguidor
     const getBadgeStyle = (followerId) => {
-        const charCodeSum = (followerId || '').split('').reduce((sum, c) => sum + c.charCodeAt(0), 0);
+        const charCodeSum = (followerId || '').split('').reduce((sum, c) => sum + c.codePointAt(0), 0);
         if (charCodeSum % 3 === 0) return { label: '🐳 WHALE', bg: 'bg-[#B45309]/20 text-[#FDE68A] border-[#B45309]/50' };
         if (charCodeSum % 3 === 1) return { label: '👑 VIP', bg: 'bg-purple-500/20 text-purple-300 border-purple-500/30' };
         return { label: '🍮 PATRON', bg: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' };
@@ -239,8 +239,7 @@ export const CreatorDashboard = () => {
                         )}
                     </div>
 
-                    {/* Sección Recent Love (Comentarios Recientes de Patrocinadores) */}
-                    <div className="bg-[#1E1E1E]/60 backdrop-blur-md rounded-3xl p-6 border border-[#2A2A2A] shadow-xl flex flex-col gap-4">
+                    <div className="bg-flansly-card/60 backdrop-blur-md rounded-3xl p-6 border border-flansly-surface/30 shadow-xl flex flex-col gap-4">
                         <h4 className="text-sm font-bold text-flansly-flan uppercase tracking-wider font-['Manrope'] flex items-center gap-2">
                             <Heart size={14} className="text-flansly-caramel animate-pulse" />
                             Recent Love (Apoyos)
@@ -271,7 +270,7 @@ export const CreatorDashboard = () => {
                                                         {badge.label}
                                                     </span>
                                                 </div>
-                                                <p className="text-[#E5E2E1] font-['Inter'] text-[11px] leading-relaxed break-words">
+                                                <p className="text-[#E5E2E1] font-['Inter'] text-[11px] leading-relaxed wrap-break-word">
                                                     {comment.content}
                                                 </p>
                                                 <span className="text-[9px] text-flansly-muted block mt-1.5 font-mono">

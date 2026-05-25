@@ -20,7 +20,7 @@ export const Input = forwardRef(
         return (
             <div className="flex flex-col gap-1.5 w-full">
                 {label && (
-                    <label className="text-flansly-muted text-sm font-medium font-[var(--font-inter)] tracking-wide">
+                    <label className="text-flansly-muted text-sm font(--font-inter) tracking-wide">
                         {label}
                     </label>
                 )}
@@ -35,7 +35,7 @@ export const Input = forwardRef(
                     ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
                 `}>
                     {StartIcon && (
-                        <span className="pl-4 text-flansly-muted flex-shrink-0">
+                        <span className="pl-4 text-flansly-muted shrink-0">
                             <StartIcon size={18} />
                         </span>
                     )}
@@ -45,7 +45,7 @@ export const Input = forwardRef(
                                 ref={ref}
                                 type="color"
                                 disabled={disabled}
-                                className={`w-10 h-10 rounded-lg cursor-pointer flex-shrink-0 ${className}`}
+                                className={`w-10 h-10 rounded-lg cursor-pointer shrink-0 ${className}`}
                                 {...props}
                             />
                             <span className="text-flansly-flan text-sm font-mono uppercase">
@@ -61,7 +61,7 @@ export const Input = forwardRef(
                                 w-full bg-transparent px-4 py-3 min-h-12
                                 text-flansly-flan placeholder-flansly-muted
                                 outline-none transition-colors
-                                font-[var(--font-inter)]
+                                font(--font-inter)
                                 disabled:cursor-not-allowed
                                 ${StartIcon ? 'pl-2' : ''}
                                 ${(isPassword || EndIcon) ? 'pr-12' : ''}
@@ -85,13 +85,13 @@ export const Input = forwardRef(
                         </button>
                     )}
                     {EndIcon && !isPassword && (
-                        <span className="pr-4 text-flansly-muted flex-shrink-0">
+                        <span className="pr-4 text-flansly-muted shrink-0">
                             <EndIcon size={18} />
                         </span>
                     )}
                 </div>
                 {error && (
-                    <span className="text-flansly-error text-xs font-[var(--font-inter)] animate-[slide-in_0.2s_ease]">
+                    <span className="text-flansly-error text-xs font(--font-inter) animate-[slide-in_0.2s_ease]">
                         {error}
                     </span>
                 )}

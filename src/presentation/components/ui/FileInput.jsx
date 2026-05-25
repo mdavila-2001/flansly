@@ -1,4 +1,4 @@
-import { forwardRef, useState, useCallback } from 'react';
+import { forwardRef, useState, useCallback, useRef } from 'react';
 import { Upload, File, X } from 'lucide-react';
 
 export const FileInput = forwardRef(
@@ -46,11 +46,14 @@ export const FileInput = forwardRef(
             setIsDragOver(false);
         }, []);
 
+        const localRef = useRef(null);
+        const inputRef = ref || localRef;
+
         const handleClick = useCallback(() => {
-            if (!disabled && ref?.current) {
-                ref.current.click();
+            if (!disabled && inputRef.current) {
+                inputRef.current.click();
             }
-        }, [disabled, ref]);
+        }, [disabled, inputRef]);
 
         const handleInputChange = useCallback((e) => {
             handleFiles(e.target.files);
@@ -63,7 +66,7 @@ export const FileInput = forwardRef(
         return (
             <div className={`flex flex-col gap-1.5 w-full ${className}`}>
                 {label && (
-                    <label className="text-flansly-muted text-sm font-medium font-[var(--font-inter)] tracking-wide">
+                    <label className="text-flansly-muted text-sm font(inter) tracking-wide">
                         {label}
                     </label>
                 )}
@@ -73,7 +76,7 @@ export const FileInput = forwardRef(
                     onDragOver={handleDragOver}
                     onDragLeave={handleDragLeave}
                     className={`
-                        relative w-full min-h-[140px] rounded-xl border-2 border-dashed
+                        relative w-full min-h-35 rounded-xl border-2 border-dashed
                         flex flex-col items-center justify-center gap-3 p-6
                         cursor-pointer transition-all duration-300
                         ${isDragOver
@@ -86,12 +89,14 @@ export const FileInput = forwardRef(
                     `}
                 >
                     <input
-                        ref={ref}
+                        ref={inputRef}
                         type="file"
                         accept={accept}
                         multiple={multiple}
                         disabled={disabled}
                         onChange={handleInputChange}
+                        onClick={(e) => e.stopPropagation()}
+                        className="hidden"
                         {...props}
                     />
                     <div className={`
@@ -115,7 +120,6 @@ export const FileInput = forwardRef(
                     </div>
                 </div>
 
-                {/* Lista de archivos */}
                 {files.length > 0 && (
                     <div className="flex flex-col gap-2 mt-1">
                         {files.map((file, index) => (
@@ -123,7 +127,7 @@ export const FileInput = forwardRef(
                                 key={`${file.name}-${index}`}
                                 className="flex items-center gap-3 bg-flansly-surface/30 rounded-lg px-3 py-2 animate-[slide-in_0.2s_ease]"
                             >
-                                <File size={16} className="text-flansly-caramel flex-shrink-0" />
+                                <File size={16} className="text-flansly-caramel shrink-0" />
                                 <div className="flex-1 min-w-0">
                                     <p className="text-flansly-flan text-xs truncate">{file.name}</p>
                                     <p className="text-flansly-muted text-[10px]">{formatSize(file.size)}</p>
@@ -141,7 +145,7 @@ export const FileInput = forwardRef(
                 )}
 
                 {error && (
-                    <span className="text-flansly-error text-xs font-[var(--font-inter)] animate-[slide-in_0.2s_ease]">
+                    <span className="text-flansly-error text-xs font(inter) animate-[slide-in_0.2s_ease]">
                         {error}
                     </span>
                 )}

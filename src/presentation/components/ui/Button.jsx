@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 export const Button = ({ 
     children, 
     variant = 'primary', 
@@ -21,4 +23,12 @@ export const Button = ({
             {children}
         </button>
     );
+};
+
+Button.propTypes = {
+    children: PropTypes.node.isRequired,
+    variant: PropTypes.oneOf(['primary', 'secondary']),
+    className: PropTypes.string,
+    icon: PropTypes.elementType,
+    props: PropTypes.object
 };

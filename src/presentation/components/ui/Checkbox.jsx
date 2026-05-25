@@ -17,7 +17,7 @@ export const Checkbox = forwardRef(
                     inline-flex items-center gap-3 cursor-pointer select-none
                     ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
                 `}>
-                    <div className="relative flex-shrink-0">
+                    <div className="relative shrink-0">
                         <input
                             ref={ref}
                             type="checkbox"
@@ -48,13 +48,13 @@ export const Checkbox = forwardRef(
                         </div>
                     </div>
                     {label && (
-                        <span className="text-flansly-flan/90 text-sm font-[var(--font-inter)]">
+                        <span className="text-flansly-flan/90 text-sm font(--font-inter)">
                             {label}
                         </span>
                     )}
                 </label>
                 {error && (
-                    <span className="text-flansly-error text-xs font-[var(--font-inter)] ml-8 animate-[slide-in_0.2s_ease]">
+                    <span className="text-flansly-error text-xs font(--font-inter) ml-8 animate-[slide-in_0.2s_ease]">
                         {error}
                     </span>
                 )}

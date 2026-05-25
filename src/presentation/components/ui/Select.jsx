@@ -14,7 +14,7 @@ export const Select = forwardRef(
         return (
             <div className="flex flex-col gap-1.5 w-full">
                 {label && (
-                    <label className="text-flansly-muted text-sm font-medium font-[var(--font-inter)] tracking-wide">
+                    <label className="text-flansly-muted text-sm font-medium font(--font-inter) tracking-wide">
                         {label}
                     </label>
                 )}
@@ -35,7 +35,7 @@ export const Select = forwardRef(
                             w-full bg-transparent px-4 py-3 min-h-12
                             text-flansly-flan
                             outline-none appearance-none
-                            font-[var(--font-inter)]
+                            font(--font-inter)
                             cursor-pointer
                             disabled:cursor-not-allowed
                             pr-10
@@ -64,7 +64,7 @@ export const Select = forwardRef(
                     />
                 </div>
                 {error && (
-                    <span className="text-flansly-error text-xs font-[var(--font-inter)] animate-[slide-in_0.2s_ease]">
+                    <span className="text-flansly-error text-xs font(--font-inter) animate-[slide-in_0.2s_ease]">
                         {error}
                     </span>
                 )}

@@ -1,45 +1,13 @@
-import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Calendar, Send, CheckCircle } from 'lucide-react';
+import { Calendar } from 'lucide-react';
 import { resolveImageUrl } from '../../../core/utils/image.utils';
-import { useAuth } from '../../../application/hooks/useAuth';
-import { useFollowerActions } from '../../../application/hooks/useFollowerActions';
-import { Textarea } from '../ui/Textarea';
-import { Button } from '../ui/Button';
 
 export const PostCard = ({ post }) => {
-    const { user } = useAuth();
-    const { executeComment, isActionLoading } = useFollowerActions();
-    
-    const [commentText, setCommentText] = useState('');
-    const [commentError, setCommentError] = useState(null);
-    const [toastMessage, setToastMessage] = useState(null);
-
     const formattedDate = new Date(post.createdAt).toLocaleDateString('es-BO', {
         day: 'numeric',
         month: 'long',
         year: 'numeric'
     });
-
-    const handleSendComment = async () => {
-        setCommentError(null);
-        const trimmed = commentText.trim();
-        if (!trimmed) {
-            setCommentError('El comentario no puede estar vacío.');
-            return;
-        }
-        try {
-            await executeComment(post.id, trimmed);
-            setCommentText('');
-            setToastMessage('Mensaje enviado en privado al creador');
-            setTimeout(() => {
-                setToastMessage(null);
-            }, 4000);
-        } catch (err) {
-            console.error('Error al registrar el comentario privado:', err);
-            setCommentError(err.message || 'Error al enviar el comentario.');
-        }
-    };
 
     return (
         <div className="w-full bg-flansly-card border border-flansly-surface/30 rounded-2xl p-6 flex flex-col gap-4 shadow-[0_4px_20px_rgba(0,0,0,0.2)]">
@@ -80,48 +48,6 @@ export const PostCard = ({ post }) => {
                     />
                 </div>
             )}
-
-            {/* CA3: Caja de Comentarios Protegida - Se inyecta solo si es un seguidor apoyado */}
-            {user?.role === 'follower' && (
-                <div className="border-t border-flansly-surface/30 pt-4 mt-2 space-y-3">
-                    <h6 className="text-xs font-semibold text-flansly-flan uppercase tracking-wider font-['Inter']">
-                        Enviar mensaje privado de apoyo
-                    </h6>
-                    <div className="flex flex-col gap-2 relative">
-                        <Textarea 
-                            placeholder="Escribe un mensaje de apoyo que solo el creador podrá leer..." 
-                            value={commentText}
-                            onChange={(e) => {
-                                setCommentError(null);
-                                setCommentText(e.target.value);
-                            }}
-                            maxLength={300}
-                            rows={3}
-                            disabled={isActionLoading}
-                            error={commentError}
-                        />
-                        <div className="flex items-center justify-between mt-1">
-                            {toastMessage ? (
-                                <div className="flex items-center gap-2 px-3 py-2 bg-emerald-500/10 border border-emerald-500/30 text-[#86efac] rounded-xl text-xs font-semibold animate-[slide-in_0.2s_ease-out]">
-                                    <CheckCircle size={14} className="text-[#86efac]" />
-                                    <span>{toastMessage}</span>
-                                </div>
-                            ) : (
-                                <div />
-                            )}
-                            <Button 
-                                variant="primary" 
-                                className="min-h-9 px-4 text-xs rounded-xl flex items-center gap-1.5 ml-auto"
-                                onClick={handleSendComment}
-                                disabled={isActionLoading || commentText.trim() === ''}
-                            >
-                                <Send size={12} />
-                                <span>{isActionLoading ? 'Enviando...' : 'Enviar'}</span>
-                            </Button>
-                        </div>
-                    </div>
-                </div>
-            )}
         </div>
     );
 };
@@ -139,5 +65,3 @@ PostCard.propTypes = {
         })
     }).isRequired
 };
-
-export default PostCard;

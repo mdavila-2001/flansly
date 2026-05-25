@@ -38,19 +38,22 @@ export const useFollower = () => {
         try {
             await followerRepository.toggleFavorite(creatorId);
             setCreators(prev => prev.map(c => c.id === creatorId ? { ...c, isFavorite: !c.isFavorite } : c));
-            if (currentProfile && currentProfile.creator.id === creatorId) {
-                setCurrentProfile(prev => ({
-                    ...prev,
-                    creator: {
-                        ...prev.creator,
-                        isFavorite: !prev.creator.isFavorite
-                    }
-                }));
-            }
+            setCurrentProfile(prev => {
+                if (prev && prev.creator.id === creatorId) {
+                    return {
+                        ...prev,
+                        creator: {
+                            ...prev.creator,
+                            isFavorite: !prev.creator.isFavorite
+                        }
+                    };
+                }
+                return prev;
+            });
         } catch (err) {
             console.error('Error al modificar favoritos:', err);
         }
-    }, [currentProfile]);
+    }, []);
 
     const fetchFeed = useCallback(async () => {
         setIsLoading(true);
@@ -65,6 +68,31 @@ export const useFollower = () => {
         }
     }, []);
 
+    const handleDonate = useCallback(async (creatorId, quantity) => {
+        setIsLoading(true);
+        setError(null);
+        try {
+            await followerRepository.donate(creatorId, quantity);
+            // Recargar el perfil para actualizar el estado de "hasDonated" y desbloquear posts al instante
+            await fetchProfile(creatorId);
+        } catch (err) {
+            setError(err.response?.data?.message || 'Error al procesar la donación.');
+            throw err;
+        } finally {
+            setIsLoading(false);
+        }
+    }, [fetchProfile]);
+
+    const markAsDonated = useCallback(() => {
+        setCurrentProfile(prev => {
+            if (!prev) return prev;
+            return {
+                ...prev,
+                hasDonated: true
+            };
+        });
+    }, []);
+
     return {
         creators,
         currentProfile,
@@ -74,6 +102,8 @@ export const useFollower = () => {
         fetchCreators,
         fetchProfile,
         handleToggleFavorite,
-        fetchFeed
+        fetchFeed,
+        handleDonate,
+        markAsDonated
     };
 };

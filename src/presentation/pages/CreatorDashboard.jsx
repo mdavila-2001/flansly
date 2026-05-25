@@ -5,7 +5,7 @@ import { PostCard } from '../components/features/PostCard';
 import { Textarea } from '../components/ui/Textarea';
 import { FileInput } from '../components/ui/FileInput';
 import { Button } from '../components/ui/Button';
-import { MessageSquare, Heart, Sparkles, TrendingUp } from 'lucide-react';
+import { Heart, Sparkles, TrendingUp } from 'lucide-react';
 
 export const CreatorDashboard = () => {
     const { user } = useAuth();
@@ -132,7 +132,7 @@ export const CreatorDashboard = () => {
                 <div className="lg:col-span-8 flex flex-col gap-8">
                     
                     {/* Caja de Creación "Añadir al Horno" */}
-                    <div className="bg-[#1E1E1E] rounded-[2rem] p-6 md:p-8 border border-[#2A2A2A] shadow-[0_8px_32px_rgba(0,0,0,0.2)]">
+                    <div className="bg-flansly-card rounded-4xl p-6 md:p-8 border border-flansly-surface shadow-[0_8px_32px_rgba(0,0,0,0.2)]">
                         <h3 className="text-lg font-bold text-flansly-flan font-['Manrope'] mb-4 flex items-center gap-2">
                             <Sparkles size={18} className="text-flansly-caramel" />
                             Añadir al Horno
@@ -174,7 +174,7 @@ export const CreatorDashboard = () => {
 
                     {/* Muro del Creador */}
                     <div className="space-y-6">
-                        <h3 className="text-xl font-bold text-[#F9F9F9] font-['Manrope'] border-b border-flansly-surface/30 pb-3 flex items-center gap-2">
+                        <h3 className="text-xl font-bold text-flansly-flan font-['Manrope'] border-b border-flansly-surface/30 pb-3 flex items-center gap-2">
                             <span>📜</span> Tu Historial del Muro
                         </h3>
                         
@@ -198,7 +198,7 @@ export const CreatorDashboard = () => {
                 <div className="lg:col-span-4 flex flex-col gap-8">
                     
                     {/* Tarjeta de Meta de Apoyo (Goal Progress) */}
-                    <div className="bg-[#1E1E1E]/60 backdrop-blur-md rounded-3xl p-6 border border-[#2A2A2A] shadow-xl flex flex-col gap-5">
+                    <div className="bg-flansly-card/60 backdrop-blur-md rounded-3xl p-6 border border-flansly-surface/50 shadow-xl flex flex-col gap-5">
                         <div className="flex items-center justify-between">
                             <h4 className="text-sm font-bold text-flansly-flan uppercase tracking-wider font-['Manrope']">
                                 🎯 Meta de Apoyo Activa
@@ -224,9 +224,9 @@ export const CreatorDashboard = () => {
                                         <span>Bs. {totalAmountBs.toFixed(2)}</span>
                                         <span>Meta: 50 Flanes (Bs. 500)</span>
                                     </div>
-                                    <div className="w-full bg-[#121212] rounded-full h-3 overflow-hidden border border-flansly-surface/40 p-0.5">
+                                    <div className="w-full bg-flansly-dark rounded-full h-3 overflow-hidden border border-flansly-surface/40 p-0.5">
                                         <div 
-                                            className="bg-[#B45309] h-full transition-all duration-500 rounded-full shadow-[0_0_10px_rgba(180,83,9,0.5)]" 
+                                            className="bg-flansly-caramel h-full transition-all duration-500 rounded-full shadow-[0_0_10px_rgba(180,83,9,0.5)]" 
                                             style={{ width: `${percent}%` }} 
                                         />
                                     </div>

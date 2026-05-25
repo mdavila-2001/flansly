@@ -6,9 +6,35 @@ export class AuthRepository {
         return response.data;
     }
 
-    async register(userData) {
-        const response = await api.post('/auth/register', userData);
+    async getMe() {
+        const response = await api.get('/auth/me');
         return response.data;
+    }
+
+    async register(userData) {
+        if (userData.avatar || userData.banner) {
+            const formData = new FormData();
+            formData.append('username', userData.username);
+            formData.append('email', userData.email);
+            formData.append('password', userData.password);
+            formData.append('displayName', userData.displayName);
+            formData.append('role', userData.role);
+            if (userData.avatar) {
+                formData.append('avatar', userData.avatar);
+            }
+            if (userData.banner) {
+                formData.append('banner', userData.banner);
+            }
+            const response = await api.post('/auth/register', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            return response.data;
+        } else {
+            const response = await api.post('/auth/register', userData);
+            return response.data;
+        }
     }
 }
 

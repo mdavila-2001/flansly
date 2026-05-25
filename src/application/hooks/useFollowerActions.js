@@ -6,18 +6,16 @@ export const useFollowerActions = () => {
     const [isActionLoading, setIsActionLoading] = useState(false);
     const [actionError, setActionError] = useState(null);
 
-    // DoD #1: Aislamiento del cálculo financiero en la Capa de Aplicación
     const calculateCost = useCallback((quantity) => {
-        const parsed = parseInt(quantity, 10);
-        if (isNaN(parsed) || parsed <= 0) return 0;
+        const parsed = Number.parseInt(quantity, 10);
+        if (Number.isNaN(parsed) || parsed <= 0) return 0;
         return parsed * SUPPORT_TYPES.FLAN.priceBs;
     }, []);
 
 
-    // DoD #3: Validación defensiva antes de despachar al backend
     const executeDonation = useCallback(async (creatorId, quantity) => {
         const parsedQuantity = Number(quantity);
-        if (!quantity || isNaN(parsedQuantity) || parsedQuantity <= 0 || !Number.isInteger(parsedQuantity)) {
+        if (!quantity || Number.isNaN(parsedQuantity) || parsedQuantity <= 0 || !Number.isInteger(parsedQuantity)) {
             throw new Error('La cantidad de flanes debe ser un número entero mayor a 0.');
         }
 

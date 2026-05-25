@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Mail, Lock, ArrowRight } from 'lucide-react';
+import { Mail, Lock, ArrowRight, AlertTriangle } from 'lucide-react';
 import { useAuth } from '../../application/hooks/useAuth';
 import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
@@ -8,7 +8,7 @@ import { Button } from '../components/ui/Button';
 export const Login = () => {
     const [identity, setIdentity] = useState('');
     const [password, setPassword] = useState('');
-    const [roleTab, setRoleTab] = useState('creator'); // Selección puramente estética en la UI
+    const [roleTab, setRoleTab] = useState('creator');
     const { submitLogin, isLoading, authError } = useAuth();
     const navigate = useNavigate();
 
@@ -18,15 +18,13 @@ export const Login = () => {
 
         try {
             const res = await submitLogin(identity, password);
-            // Redirigir al dashboard/feed correspondiente según el rol decodificado
             if (res.role === 'creator') {
                 navigate('/creator/dashboard', { replace: true });
             } else {
                 navigate('/follower/feed', { replace: true });
             }
-        } catch {
-            // El hook 'useAuth' ya se encarga de guardar e imprimir el error.
-            // Limpiamos 'err' inactivo para cumplir con las reglas estrictas del linter.
+        } catch (err) {
+            console.error(err.message);
         }
     };
 
@@ -56,7 +54,6 @@ export const Login = () => {
                             </p>
                         </div>
 
-                        {/* Selector de Rol Pill Toggle (Visual y Estético) */}
                         <div className="grid grid-cols-2 bg-[#121212] p-1 rounded-full border border-flansly-surface/40 mb-8 relative select-none">
                             <div 
                                 className={`absolute top-1 bottom-1 w-[calc(50%-4px)] bg-flansly-card rounded-full shadow-md transition-all duration-300 ease-in-out border border-flansly-surface/50 ${
@@ -87,14 +84,12 @@ export const Login = () => {
                             </button>
                         </div>
 
-                        {/* Alerta de Error del Servidor */}
                         {authError && (
                             <div className="bg-flansly-error/10 border border-flansly-error/30 text-flansly-error rounded-xl p-3 text-xs mb-5 flex items-center gap-2 animate-[slide-in_0.2s_ease] font-inter">
-                                ⚠️ {authError}
+                                <AlertTriangle size={14} /> {authError}
                             </div>
                         )}
 
-                        {/* Formulario de Login */}
                         <form onSubmit={handleSubmit} className="space-y-5">
                             <Input
                                 label="Correo Electrónico o Usuario"
@@ -138,7 +133,6 @@ export const Login = () => {
                             </Button>
                         </form>
 
-                        {/* Enlace de Registro */}
                         <div className="text-center mt-8 pt-6 border-t border-flansly-surface/30">
                             <p className="text-xs text-flansly-muted font-inter">
                                 ¿No tienes una cuenta?{' '}

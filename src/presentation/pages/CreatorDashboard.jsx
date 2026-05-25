@@ -5,7 +5,7 @@ import { PostCard } from '../components/features/PostCard';
 import { Textarea } from '../components/ui/Textarea';
 import { FileInput } from '../components/ui/FileInput';
 import { Button } from '../components/ui/Button';
-import { Heart, Sparkles, TrendingUp } from 'lucide-react';
+import { Heart, Sparkles, TrendingUp, AlertTriangle, Flame, ScrollText, Target, Crown, Gem, CakeSlice } from 'lucide-react';
 
 export const CreatorDashboard = () => {
     const { user } = useAuth();
@@ -17,18 +17,20 @@ export const CreatorDashboard = () => {
         creatorError, 
         fetchCreatorPosts, 
         handleCreatePost, 
-        fetchReports 
+        fetchReports,
+        fetchActiveGoal
     } = useCreator();
 
     const [contentText, setContentText] = useState('');
     const [postImage, setPostImage] = useState(null);
-    const [fileInputKey, setFileInputKey] = useState(0); // Para forzar el remonte y limpieza de FileInput
+    const [fileInputKey, setFileInputKey] = useState(0);
     const fileInputRef = useRef(null);
 
     useEffect(() => {
         fetchCreatorPosts();
         fetchReports();
-    }, [fetchCreatorPosts, fetchReports]);
+        fetchActiveGoal();
+    }, [fetchCreatorPosts, fetchReports, fetchActiveGoal]);
 
     const handlePublish = async (e) => {
         e.preventDefault();
@@ -45,19 +47,16 @@ export const CreatorDashboard = () => {
 
             await handleCreatePost(formData);
             
-            // Limpieza exitosa del formulario
             setContentText('');
             setPostImage(null);
-            setFileInputKey(prev => prev + 1); // Forzar remonte de FileInput para limpiar su estado interno
+            setFileInputKey(prev => prev + 1);
         } catch (err) {
             console.error('Error al publicar post:', err);
         }
     };
 
-    // Cortafuegos de envío físico: botón habilitado solo si hay contenido
     const isPublishDisabled = !contentText.trim() && !postImage;
 
-    // Sincronización defensiva del creador en el PostCard
     const processedPosts = posts.map(p => ({
         ...p,
         creator: p.creator || {
@@ -67,7 +66,6 @@ export const CreatorDashboard = () => {
         }
     }));
 
-    // Consolidar todos los comentarios para la sección "Recent Love"
     const recentComments = posts
         .flatMap(p => 
             (p.comments || []).map(c => ({
@@ -77,29 +75,26 @@ export const CreatorDashboard = () => {
             }))
         )
         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-        .slice(0, 5); // Tomamos los 5 más recientes
+        .slice(0, 5);
 
-    // Asignación de insignias estéticas según el nombre del seguidor
     const getBadgeStyle = (followerId) => {
-        const charCodeSum = (followerId || '').split('').reduce((sum, c) => sum + c.charCodeAt(0), 0);
-        if (charCodeSum % 3 === 0) return { label: '🐳 WHALE', bg: 'bg-[#B45309]/20 text-[#FDE68A] border-[#B45309]/50' };
-        if (charCodeSum % 3 === 1) return { label: '👑 VIP', bg: 'bg-purple-500/20 text-purple-300 border-purple-500/30' };
-        return { label: '🍮 PATRON', bg: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' };
+        const charCodeSum = (followerId || '').split('').reduce((sum, c) => sum + c.codePointAt(0), 0);
+        if (charCodeSum % 3 === 0) return { label: 'WHALE', icon: Crown, bg: 'bg-[#B45309]/20 text-[#FDE68A] border-[#B45309]/50' };
+        if (charCodeSum % 3 === 1) return { label: 'VIP', icon: Gem, bg: 'bg-purple-500/20 text-purple-300 border-purple-500/30' };
+        return { label: 'PATRON', icon: CakeSlice, bg: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' };
     };
 
-    // Metas y progreso (Bs. 10 por flan)
     const totalFlans = reports?.metrics?.totalFlans || 0;
     const totalAmountBs = reports?.metrics?.totalAmountBs || 0;
-    const targetFlans = 50; // Meta por defecto de 50 flanes
+    const targetFlans = activeGoal?.targetFlans || 50;
     const percent = Math.min(100, Math.round((totalFlans / targetFlans) * 100));
 
     return (
         <div className="space-y-8 max-w-7xl mx-auto">
-            {/* Header de Bienvenida Premium */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-flansly-surface/30 pb-6">
                 <div>
                     <h2 className="text-3xl font-extrabold text-[#F9F9F9] font-['Manrope'] tracking-tight flex items-center gap-2">
-                        ¡Buenas vibras, Chef! <span className="animate-bounce">🔥</span>
+                        ¡Buenas vibras, Chef! <Flame size={18} className="animate-bounce text-flansly-caramel" />
                     </h2>
                     <p className="text-flansly-muted text-sm mt-1">
                         Tu cocina digital está activa. Gestiona tus posts y consiente a tus patrocinadores.
@@ -118,20 +113,14 @@ export const CreatorDashboard = () => {
                 )}
             </div>
 
-            {/* Alerta de errores */}
             {creatorError && (
                 <div className="bg-flansly-error/10 border border-flansly-error/30 text-flansly-error rounded-xl p-4 text-xs animate-[slide-in_0.2s_ease]">
-                    ⚠️ {creatorError}
+                    <AlertTriangle size={14} /> {creatorError}
                 </div>
             )}
 
-            {/* Layout de Dos Columnas */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                
-                {/* Columna Izquierda: Creación y Feed */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">                
                 <div className="lg:col-span-8 flex flex-col gap-8">
-                    
-                    {/* Caja de Creación "Añadir al Horno" */}
                     <div className="bg-flansly-card rounded-4xl p-6 md:p-8 border border-flansly-surface shadow-[0_8px_32px_rgba(0,0,0,0.2)]">
                         <h3 className="text-lg font-bold text-flansly-flan font-['Manrope'] mb-4 flex items-center gap-2">
                             <Sparkles size={18} className="text-flansly-caramel" />
@@ -166,16 +155,14 @@ export const CreatorDashboard = () => {
                                     disabled={isLoading || isPublishDisabled}
                                     className="min-w-40"
                                 >
-                                    {isLoading ? 'Cocinando Publicación...' : '🍮 Publicar Post Exclusivo'}
+                                    {isLoading ? 'Cocinando Publicación...' : 'Publicar Post Exclusivo'}
                                 </Button>
                             </div>
                         </form>
                     </div>
-
-                    {/* Muro del Creador */}
                     <div className="space-y-6">
                         <h3 className="text-xl font-bold text-flansly-flan font-['Manrope'] border-b border-flansly-surface/30 pb-3 flex items-center gap-2">
-                            <span>📜</span> Tu Historial del Muro
+                            <ScrollText size={18} /> Tu Historial del Muro
                         </h3>
                         
                         {processedPosts.length === 0 ? (
@@ -193,15 +180,11 @@ export const CreatorDashboard = () => {
                     </div>
 
                 </div>
-
-                {/* Columna Derecha / Aside: Insights */}
                 <div className="lg:col-span-4 flex flex-col gap-8">
-                    
-                    {/* Tarjeta de Meta de Apoyo (Goal Progress) */}
                     <div className="bg-flansly-card/60 backdrop-blur-md rounded-3xl p-6 border border-flansly-surface/50 shadow-xl flex flex-col gap-5">
                         <div className="flex items-center justify-between">
                             <h4 className="text-sm font-bold text-flansly-flan uppercase tracking-wider font-['Manrope']">
-                                🎯 Meta de Apoyo Activa
+                                <Target size={14} /> Meta de Apoyo Activa
                             </h4>
                             <span className="text-xs font-mono text-flansly-caramel bg-flansly-caramel/10 px-2.5 py-1 rounded-lg border border-flansly-caramel/30 font-semibold">
                                 {percent}%
@@ -222,7 +205,7 @@ export const CreatorDashboard = () => {
                                 <div className="space-y-1.5 pt-2">
                                     <div className="flex justify-between text-xs font-mono text-flansly-flan">
                                         <span>Bs. {totalAmountBs.toFixed(2)}</span>
-                                        <span>Meta: 50 Flanes (Bs. 500)</span>
+                                        <span>Meta: {targetFlans} Flanes (Bs. {targetFlans * 10})</span>
                                     </div>
                                     <div className="w-full bg-flansly-dark rounded-full h-3 overflow-hidden border border-flansly-surface/40 p-0.5">
                                         <div 
@@ -239,8 +222,7 @@ export const CreatorDashboard = () => {
                         )}
                     </div>
 
-                    {/* Sección Recent Love (Comentarios Recientes de Patrocinadores) */}
-                    <div className="bg-[#1E1E1E]/60 backdrop-blur-md rounded-3xl p-6 border border-[#2A2A2A] shadow-xl flex flex-col gap-4">
+                    <div className="bg-flansly-card/60 backdrop-blur-md rounded-3xl p-6 border border-flansly-surface/30 shadow-xl flex flex-col gap-4">
                         <h4 className="text-sm font-bold text-flansly-flan uppercase tracking-wider font-['Manrope'] flex items-center gap-2">
                             <Heart size={14} className="text-flansly-caramel animate-pulse" />
                             Recent Love (Apoyos)
@@ -260,18 +242,19 @@ export const CreatorDashboard = () => {
                                             className="p-3 bg-flansly-dark/50 rounded-2xl border border-flansly-surface/30 flex gap-3 text-xs leading-relaxed animate-[slide-in_0.2s_ease]"
                                         >
                                             <div className="w-8 h-8 rounded-full bg-flansly-surface/80 flex items-center justify-center shrink-0 border border-flansly-surface shadow-sm text-sm">
-                                                🍮
+                                                <CakeSlice size={14} className="text-flansly-flan" />
                                             </div>
                                             <div className="flex-1 min-w-0">
                                                 <div className="flex justify-between items-center gap-2 mb-1">
                                                     <span className="font-bold text-flansly-flan truncate">
                                                         {comment.follower?.displayName || 'Patrocinador'}
                                                     </span>
-                                                    <span className={`text-[8px] px-1.5 py-0.5 rounded-md font-mono border font-black ${badge.bg}`}>
+                                                    <span className={`text-[8px] px-1.5 py-0.5 rounded-md font-mono border font-black flex items-center gap-1 ${badge.bg}`}>
+                                                        {badge.icon && <badge.icon size={10} />}
                                                         {badge.label}
                                                     </span>
                                                 </div>
-                                                <p className="text-[#E5E2E1] font-['Inter'] text-[11px] leading-relaxed break-words">
+                                                <p className="text-[#E5E2E1] font-['Inter'] text-[11px] leading-relaxed wrap-break-word">
                                                     {comment.content}
                                                 </p>
                                                 <span className="text-[9px] text-flansly-muted block mt-1.5 font-mono">

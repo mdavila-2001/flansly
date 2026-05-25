@@ -19,7 +19,7 @@ export const LockOverlay = ({ onOpenDonateModal }) => {
                 className="mt-5" 
                 onClick={onOpenDonateModal}
             >
-                🍮 Invitar un Flan
+                Invitar un Flan
             </Button>
         </div>
     );

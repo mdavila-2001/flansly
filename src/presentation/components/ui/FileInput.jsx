@@ -1,4 +1,4 @@
-import { forwardRef, useState, useCallback } from 'react';
+import { forwardRef, useState, useCallback, useRef } from 'react';
 import { Upload, File, X } from 'lucide-react';
 
 export const FileInput = forwardRef(
@@ -46,11 +46,14 @@ export const FileInput = forwardRef(
             setIsDragOver(false);
         }, []);
 
+        const localRef = useRef(null);
+        const inputRef = ref || localRef;
+
         const handleClick = useCallback(() => {
-            if (!disabled && ref?.current) {
-                ref.current.click();
+            if (!disabled && inputRef.current) {
+                inputRef.current.click();
             }
-        }, [disabled, ref]);
+        }, [disabled, inputRef]);
 
         const handleInputChange = useCallback((e) => {
             handleFiles(e.target.files);
@@ -86,12 +89,14 @@ export const FileInput = forwardRef(
                     `}
                 >
                     <input
-                        ref={ref}
+                        ref={inputRef}
                         type="file"
                         accept={accept}
                         multiple={multiple}
                         disabled={disabled}
                         onChange={handleInputChange}
+                        onClick={(e) => e.stopPropagation()}
+                        className="hidden"
                         {...props}
                     />
                     <div className={`
@@ -115,7 +120,6 @@ export const FileInput = forwardRef(
                     </div>
                 </div>
 
-                {/* Lista de archivos */}
                 {files.length > 0 && (
                     <div className="flex flex-col gap-2 mt-1">
                         {files.map((file, index) => (

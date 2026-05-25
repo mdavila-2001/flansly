@@ -75,7 +75,6 @@ export const useFollower = () => {
         setError(null);
         try {
             await followerRepository.donate(creatorId, quantity);
-            // Recargar el perfil para actualizar el estado de "hasDonated" y desbloquear posts al instante
             await fetchProfile(creatorId);
         } catch (err) {
             setError(err.response?.data?.message || 'Error al procesar la donación.');

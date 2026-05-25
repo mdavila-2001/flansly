@@ -7,11 +7,9 @@ export const resolveImageUrl = (url) => {
         return url;
     }
     
-    // Obtener la URL base y limpiarle el /api si lo tiene
-    const apiEnv = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+    const apiEnv = import.meta.env.VITE_API_URL;
     const baseUrl = apiEnv.replace(/\/api\/?$/, ''); 
-    
-    // Asegurar que no hayan dobles barras al concatenar
+
     const cleanBase = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
     const cleanUrl = url.startsWith('/') ? url : `/${url}`;
     

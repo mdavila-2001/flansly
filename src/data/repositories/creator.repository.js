@@ -10,8 +10,13 @@ export class CreatorRepository {
         return response.data;
     }
 
-    async updateGoal({ title, description }) {
-        const response = await api.put('/creator/goal', { title, description });
+    async updateGoal({ title, description, targetFlans }) {
+        const response = await api.put('/creator/goal', { title, description, targetFlans });
+        return response.data;
+    }
+
+    async getActiveGoal() {
+        const response = await api.get('/creator/goal');
         return response.data;
     }
 

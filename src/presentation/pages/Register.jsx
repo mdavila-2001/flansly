@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { User, Mail, Lock, ArrowRight } from 'lucide-react';
+import { User, Mail, Lock, ArrowRight, AlertTriangle } from 'lucide-react';
 import { useAuth } from '../../application/hooks/useAuth';
 import { Input } from '../components/ui/Input';
 import { FileInput } from '../components/ui/FileInput';
@@ -11,9 +11,7 @@ export const Register = () => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [role, setRole] = useState('creator'); // 'creator' o 'follower'
-    
-    // File inputs locales para Creadores (manejo estético visual de alta fidelidad)
+    const [role, setRole] = useState('creator');
     const [avatarFile, setAvatarFile] = useState(null);
     const [bannerFile, setBannerFile] = useState(null);
 
@@ -23,31 +21,21 @@ export const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Validaciones básicas antes del submit
         if (!displayName.trim() || !username.trim() || !email.trim() || !password.trim()) {
             return;
         }
 
         try {
-            // Nota de Arquitectura: Se respetan estrictamente las claves del Joi registerSchema
-            // del backend para evitar errores de validación de llaves desconocidas.
             await submitRegister({
                 displayName: displayName.trim(),
                 username: username.trim().toLowerCase(),
                 email: email.trim().toLowerCase(),
                 password,
-                role
+                role,
+                avatar: avatarFile,
+                banner: bannerFile
             });
 
-            // Log estético de archivos cargados para posterior sincronización de perfil asíncrono
-            if (avatarFile || bannerFile) {
-                console.log('Archivos listos para sincronización posterior de canal:', {
-                    avatar: avatarFile?.name,
-                    banner: bannerFile?.name
-                });
-            }
-
-            // Tras un registro exitoso, redirigimos a la pantalla de login
             navigate('/login');
         } catch (err) {
             console.error('Error durante submitRegister:', err.message);
@@ -96,16 +84,13 @@ export const Register = () => {
                         </button>
                     </div>
 
-                    {/* Alerta de Error del Servidor */}
                     {authError && (
                         <div className="bg-flansly-error/10 border border-flansly-error/30 text-flansly-error rounded-xl p-3 text-xs mb-5 flex items-center gap-2 animate-[slide-in_0.2s_ease] font-inter">
-                            ⚠️ {authError}
+                            <AlertTriangle size={14} /> {authError}
                         </div>
                     )}
 
-                    {/* Formulario de Registro */}
                     <form onSubmit={handleSubmit} className="space-y-4">
-                        {/* Campos Base: Nombre de Usuario y Nombre Público en una sola fila (2 columnas) */}
                         <div className="grid grid-cols-2 gap-4">
                             <Input
                                 label="Usuario"
@@ -151,23 +136,31 @@ export const Register = () => {
                             required
                         />
 
-                        {/* Campos Condicionales (Avatar y Banner) solo para Creadores */}
-                        {role === 'creator' && (
-                            <div className="grid grid-cols-2 gap-4 pt-2 border-t border-flansly-surface/30 animate-[slide-in_0.2s_ease]">
+                        <div className="pt-2 border-t border-flansly-surface/30 animate-[slide-in_0.2s_ease]">
+                            {role === 'creator' ? (
+                                <div className="grid grid-cols-2 gap-4">
+                                    <FileInput
+                                        label="Foto de Perfil"
+                                        accept="image/*"
+                                        disabled={isLoading}
+                                        onChange={(e) => setAvatarFile(e.target.files?.[0] || null)}
+                                    />
+                                    <FileInput
+                                        label="Banner de Portada"
+                                        accept="image/*"
+                                        disabled={isLoading}
+                                        onChange={(e) => setBannerFile(e.target.files?.[0] || null)}
+                                    />
+                                </div>
+                            ) : (
                                 <FileInput
                                     label="Foto de Perfil"
                                     accept="image/*"
                                     disabled={isLoading}
                                     onChange={(e) => setAvatarFile(e.target.files?.[0] || null)}
                                 />
-                                <FileInput
-                                    label="Banner de Portada"
-                                    accept="image/*"
-                                    disabled={isLoading}
-                                    onChange={(e) => setBannerFile(e.target.files?.[0] || null)}
-                                />
-                            </div>
-                        )}
+                            )}
+                        </div>
 
                         <Button
                             variant="primary"
@@ -180,7 +173,6 @@ export const Register = () => {
                         </Button>
                     </form>
 
-                    {/* Enlace de Login */}
                     <div className="text-center mt-8 pt-6 border-t border-flansly-surface/30">
                         <p className="text-xs text-flansly-muted font-inter">
                             ¿Ya tienes una cuenta?{' '}

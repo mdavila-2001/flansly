@@ -24,12 +24,11 @@ export const DonateModal = ({ isOpen, onClose, creator, onDonate, isLoading }) =
     return (
         <Modal isOpen={isOpen} onClose={onClose} title={`Invitar Flanes a ${creator?.displayName || 'Creador'}`}>
             <form onSubmit={handleSubmit} className="space-y-5">
-                <Input 
-                    label="Cantidad de Flanes a enviar" 
-                    type="number" 
-                    min={1} 
-                    max={50} 
-                    value={flansQuantity} 
+                <Input
+                    label="Cantidad de Flanes a enviar"
+                    type="number"
+                    min={1}
+                    value={flansQuantity}
                     onChange={(e) => setFlansQuantity(Math.max(1, parseInt(e.target.value) || 1))}
                     disabled={isLoading}
                 />

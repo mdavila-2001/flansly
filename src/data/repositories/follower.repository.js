@@ -31,12 +31,12 @@ export class FollowerRepository {
         return response.data;
     }
 
-    async getHistory(startDate, endDate, creatorName) {
+    async getDonationHistory({ startDate, endDate, creatorName } = {}) {
         const response = await api.get('/follower/history', {
             params: {
-                start_date: startDate,
-                end_date: endDate,
-                creator_name: creatorName
+                startDate,
+                endDate,
+                creatorName
             }
         });
         return response.data;

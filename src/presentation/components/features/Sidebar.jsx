@@ -1,18 +1,19 @@
-// src/presentation/components/features/Sidebar.jsx
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../../application/hooks/useAuth';
-import { LogOut, Menu, X, BarChart3, UserCircle, Search, CakeSlice, Star } from 'lucide-react';
+import { LogOut, Menu, X, BarChart3, UserCircle, Search, CakeSlice, Star, ScrollText, History } from 'lucide-react';
 
 const MENU_ITEMS = {
     creator: [
         { to: '/creator/dashboard', label: 'Dashboard Analítico', icon: BarChart3 },
+        { to: '/creator/reports', label: 'Auditoría de Ingresos', icon: ScrollText },
         { to: '/creator/profile', label: 'Editar Mi Perfil', icon: UserCircle }
     ],
     follower: [
         { to: '/follower/explore', label: 'Explorar Creadores', icon: Search },
         { to: '/follower/feed', label: 'Muro De Flanes', icon: CakeSlice },
-        { to: '/follower/favorites', label: 'Mis Creadores', icon: Star }
+        { to: '/follower/favorites', label: 'Mis Creadores', icon: Star },
+        { to: '/follower/history', label: 'Historial de Aportes', icon: History }
     ]
 };
 

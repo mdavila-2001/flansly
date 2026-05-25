@@ -1,4 +1,3 @@
-// src/presentation/routes/RoleRoute.jsx
 import { Navigate, Outlet } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useAuth } from '../../application/hooks/useAuth';

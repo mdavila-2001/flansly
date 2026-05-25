@@ -8,7 +8,7 @@ import { Button } from '../components/ui/Button';
 export const Login = () => {
     const [identity, setIdentity] = useState('');
     const [password, setPassword] = useState('');
-    const [roleTab, setRoleTab] = useState('creator'); // Selección puramente estética en la UI
+    const [roleTab, setRoleTab] = useState('creator');
     const { submitLogin, isLoading, authError } = useAuth();
     const navigate = useNavigate();
 
@@ -18,15 +18,13 @@ export const Login = () => {
 
         try {
             const res = await submitLogin(identity, password);
-            // Redirigir al dashboard/feed correspondiente según el rol decodificado
             if (res.role === 'creator') {
                 navigate('/creator/dashboard', { replace: true });
             } else {
                 navigate('/follower/feed', { replace: true });
             }
-        } catch {
-            // El hook 'useAuth' ya se encarga de guardar e imprimir el error.
-            // Limpiamos 'err' inactivo para cumplir con las reglas estrictas del linter.
+        } catch (err) {
+            console.error(err.message);
         }
     };
 

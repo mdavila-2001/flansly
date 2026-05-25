@@ -19,7 +19,6 @@ export const CreatorProfile = () => {
         fetchActiveGoal
     } = useCreator();
 
-    // Estados para Perfil Visual
     const [displayName, setDisplayName] = useState(user?.displayName || '');
     const [avatarFile, setAvatarFile] = useState(null);
     const [bannerFile, setBannerFile] = useState(null);
@@ -27,17 +26,14 @@ export const CreatorProfile = () => {
     const [bannerPreview, setBannerPreview] = useState(user?.bannerImageUrl || '');
     const [profileSuccess, setProfileSuccess] = useState(false);
 
-    // Estados para Metas de Apoyo
     const [goalTitle, setGoalTitle] = useState(activeGoal?.title || '');
     const [goalDescription, setGoalDescription] = useState(activeGoal?.description || '');
     const [goalTarget, setGoalTarget] = useState(activeGoal?.targetFlans || 50);
     const [goalSuccess, setGoalSuccess] = useState(false);
 
-    // Refs para File Inputs
     const avatarInputRef = useRef(null);
     const bannerInputRef = useRef(null);
 
-    // Sincronizar estados locales cuando cambie la meta persistida de forma asíncrona para evitar cascading renders
     useEffect(() => {
         if (activeGoal) {
             const timer = setTimeout(() => {
@@ -53,7 +49,6 @@ export const CreatorProfile = () => {
         fetchActiveGoal();
     }, [fetchActiveGoal]);
 
-    // Manejar cambios e previsualizaciones instantáneas
     const handleAvatarChange = (e) => {
         const file = e.target.files?.[0];
         if (file) {
@@ -70,7 +65,6 @@ export const CreatorProfile = () => {
         }
     };
 
-    // Envío del Perfil Visual (FormData)
     const handleSubmitProfile = async (e) => {
         e.preventDefault();
         setProfileSuccess(false);
@@ -93,7 +87,6 @@ export const CreatorProfile = () => {
         }
     };
 
-    // Envío de la Meta de Apoyo (JSON)
     const handleSubmitGoal = async (e) => {
         e.preventDefault();
         setGoalSuccess(false);

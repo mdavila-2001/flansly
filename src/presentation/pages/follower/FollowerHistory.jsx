@@ -1,15 +1,22 @@
-import { useEffect, useState } from 'react';
-import { useFollower } from '../../../application/hooks/useFollower';
+import { useEffect } from 'react';
+import { useFollowerHistory } from '../../../application/hooks/useFollowerHistory';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
 import { DataTable } from '../../components/ui/DataTable';
-import { Search, Heart, Award, DollarSign } from 'lucide-react';
+import { Search, Award, DollarSign, History } from 'lucide-react';
+
+const FLAN_UNIT_PRICE_BS = 10;
 
 export const FollowerHistory = () => {
-    const { history, isHistoryLoading, error, fetchHistory } = useFollower();
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
-    const [creatorName, setCreatorName] = useState('');
+    const {
+        filters,
+        donations,
+        isLoading,
+        error,
+        fetchHistory,
+        handleFilterChange,
+        resetFilters
+    } = useFollowerHistory();
 
     useEffect(() => {
         fetchHistory();
@@ -17,25 +24,22 @@ export const FollowerHistory = () => {
 
     const handleSearch = (e) => {
         e.preventDefault();
-        fetchHistory(startDate || undefined, endDate || undefined, creatorName || undefined);
+        fetchHistory(filters);
     };
 
     const handleClear = () => {
-        setStartDate('');
-        setEndDate('');
-        setCreatorName('');
-        fetchHistory();
+        resetFilters();
     };
 
-    const totalFlans = history.reduce((sum, item) => sum + (item.quantity || 0), 0);
-    const totalInvested = history.reduce((sum, item) => sum + Number(item.totalAmount || item.amount || 0), 0);
+    const totalFlans = donations.reduce((sum, item) => sum + (item.quantity || 0), 0);
+    const totalInvested = donations.reduce((sum, item) => sum + (item.quantity || 0) * FLAN_UNIT_PRICE_BS, 0);
 
     const columns = [
         {
             header: 'Fecha',
             accessor: 'createdAt',
             cell: (row) => {
-                const dateVal = row.createdAt || row.date;
+                const dateVal = row.createdAt;
                 return dateVal ? new Date(dateVal).toLocaleDateString('es-BO', {
                     day: 'numeric',
                     month: 'long',
@@ -46,18 +50,18 @@ export const FollowerHistory = () => {
             }
         },
         {
-            header: 'Creador Apoyado',
+            header: 'Creador',
             accessor: 'creatorName',
             cell: (row) => {
-                const name = row.creator?.displayName || row.creatorName || 'Creador de Flansly';
+                const name = row.creator?.displayName || 'Creador de Flansly';
                 const username = row.creator?.username;
                 return (
                     <div className="flex flex-col">
-                        <span className="font-semibold text-white flex items-center gap-2">
-                            🍮 {name}
+                        <span className="font-semibold text-white">
+                            {name}
                         </span>
                         {username && (
-                            <span className="text-[10px] text-flansly-muted font-mono pl-6">
+                            <span className="text-[10px] text-flansly-muted font-mono">
                                 @{username}
                             </span>
                         )}
@@ -66,24 +70,25 @@ export const FollowerHistory = () => {
             }
         },
         {
-            header: 'Flanes Donados',
+            header: 'Flanes Aportados',
             accessor: 'quantity',
             isNumeric: true,
             cell: (row) => {
                 const quantity = row.quantity || 0;
                 return (
                     <span className="font-mono text-flansly-flan bg-flansly-caramel/10 border border-flansly-caramel/30 px-2.5 py-1 rounded-lg">
-                        🍮 {quantity} {quantity === 1 ? 'Flan' : 'Flanes'}
+                        {quantity} {quantity === 1 ? 'Flan' : 'Flanes'}
                     </span>
                 );
             }
         },
         {
-            header: 'Total Invertido',
+            header: 'Inversión Total',
             accessor: 'totalAmount',
             isNumeric: true,
             cell: (row) => {
-                const amount = Number(row.totalAmount || row.amount || 0);
+                const quantity = row.quantity || 0;
+                const amount = quantity * FLAN_UNIT_PRICE_BS;
                 return (
                     <span className="font-mono text-[#FDE68A] font-bold">
                         Bs. {amount.toFixed(2)}
@@ -94,10 +99,10 @@ export const FollowerHistory = () => {
     ];
 
     return (
-        <div className="max-w-7xl mx-auto space-y-6 text-[#F9F9F9]">
+        <div className="max-w-7xl mx-auto space-y-6 text-[#F9F9F9] font-['Inter']">
             <div className="border-b border-flansly-surface/30 pb-6">
-                <h2 className="text-3xl font-extrabold text-[#F9F9F9] font-['Manrope'] tracking-tight flex items-center gap-2">
-                    📈 Historial de Inversiones
+                <h2 className="text-3xl font-extrabold text-[#F9F9F9] font-['Manrope'] tracking-tight">
+                    Historial de Inversiones
                 </h2>
                 <p className="text-flansly-muted text-sm mt-1">
                     Audita las muestras de amor e inversiones que has horneado y enviado a tus creadores preferidos de Flansly.
@@ -106,11 +111,11 @@ export const FollowerHistory = () => {
 
             {error && (
                 <div className="bg-flansly-error/10 border border-flansly-error/30 text-flansly-error rounded-xl p-4 text-xs animate-[slide-in_0.2s_ease]">
-                    ⚠️ {error}
+                    {error}
                 </div>
             )}
 
-            <div className="bg-[#1E1E1E] rounded-[2rem] p-6 border border-[#2A2A2A] shadow-xl">
+            <div className="bg-flansly-card rounded-2xl border border-flansly-surface/30 p-6 shadow-xl">
                 <h3 className="text-sm font-bold text-flansly-flan uppercase tracking-wider font-['Manrope'] mb-4 flex items-center gap-2">
                     <Search size={16} className="text-flansly-caramel" />
                     Filtrar Inversiones
@@ -119,19 +124,19 @@ export const FollowerHistory = () => {
                     <div>
                         <Input
                             type="date"
-                            label="Desde"
-                            value={startDate}
-                            onChange={(e) => setStartDate(e.target.value)}
-                            disabled={isHistoryLoading}
+                            label="Fecha Inicio"
+                            value={filters.startDate}
+                            onChange={(e) => handleFilterChange('startDate', e.target.value)}
+                            disabled={isLoading}
                         />
                     </div>
                     <div>
                         <Input
                             type="date"
-                            label="Hasta"
-                            value={endDate}
-                            onChange={(e) => setEndDate(e.target.value)}
-                            disabled={isHistoryLoading}
+                            label="Fecha Fin"
+                            value={filters.endDate}
+                            onChange={(e) => handleFilterChange('endDate', e.target.value)}
+                            disabled={isLoading}
                         />
                     </div>
                     <div>
@@ -139,26 +144,26 @@ export const FollowerHistory = () => {
                             type="text"
                             label="Nombre del Creador"
                             placeholder="Buscar por creador..."
-                            value={creatorName}
-                            onChange={(e) => setCreatorName(e.target.value)}
-                            disabled={isHistoryLoading}
+                            value={filters.creatorName}
+                            onChange={(e) => handleFilterChange('creatorName', e.target.value)}
+                            disabled={isLoading}
                         />
                     </div>
                     <div className="flex gap-3 pt-2">
                         <Button
                             variant="primary"
                             type="submit"
-                            disabled={isHistoryLoading}
+                            disabled={isLoading}
                             className="flex-1"
                         >
-                            {isHistoryLoading ? 'Buscando...' : '🔍 Buscar'}
+                            {isLoading ? 'Buscando...' : 'Filtrar Historial'}
                         </Button>
-                        {(startDate || endDate || creatorName) && (
+                        {(filters.startDate || filters.endDate || filters.creatorName) && (
                             <Button
                                 variant="secondary"
                                 type="button"
                                 onClick={handleClear}
-                                disabled={isHistoryLoading}
+                                disabled={isLoading}
                             >
                                 Limpiar
                             </Button>
@@ -168,7 +173,7 @@ export const FollowerHistory = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="bg-[#1E1E1E]/80 backdrop-blur-md border border-[#2A2A2A] rounded-3xl p-6 shadow-xl flex items-center gap-5 relative overflow-hidden group">
+                <div className="bg-flansly-card rounded-2xl border border-flansly-surface/30 p-6 shadow-xl flex items-center gap-5 relative overflow-hidden group">
                     <div className="absolute w-32 h-32 bg-[#B45309]/5 rounded-full blur-2xl top-1/2 -right-4 -translate-y-1/2 pointer-events-none" />
                     <div className="p-4 bg-flansly-caramel/10 text-flansly-flan rounded-2xl shrink-0">
                         <Award size={28} />
@@ -181,7 +186,7 @@ export const FollowerHistory = () => {
                     </div>
                 </div>
 
-                <div className="bg-[#1E1E1E]/80 backdrop-blur-md border border-[#2A2A2A] rounded-3xl p-6 shadow-xl flex items-center gap-5 relative overflow-hidden group">
+                <div className="bg-flansly-card rounded-2xl border border-flansly-surface/30 p-6 shadow-xl flex items-center gap-5 relative overflow-hidden group">
                     <div className="absolute w-32 h-32 bg-emerald-500/5 rounded-full blur-2xl top-1/2 -right-4 -translate-y-1/2 pointer-events-none" />
                     <div className="p-4 bg-emerald-500/10 text-emerald-400 rounded-2xl shrink-0">
                         <DollarSign size={28} />
@@ -197,14 +202,15 @@ export const FollowerHistory = () => {
 
             <div className="space-y-4">
                 <h3 className="text-lg font-bold text-white font-manrope border-b border-flansly-surface/30 pb-3 flex items-center gap-2">
-                    <Heart size={18} className="text-flansly-caramel animate-pulse" /> Historial de Transacciones
+                    <History size={18} className="text-flansly-caramel" />
+                    Historial de Transacciones
                 </h3>
-                {history.length === 0 ? (
+                {donations.length === 0 ? (
                     <div className="text-center py-20 bg-flansly-card/30 rounded-3xl border border-flansly-surface/20 text-flansly-muted text-sm font-mono leading-relaxed">
-                        {isHistoryLoading ? 'Auditando historial de transacciones...' : 'Aún no has invitado flanes a ningún creador independiente.'}
+                        {isLoading ? 'Auditando historial de transacciones...' : 'No se registraron aportes en este rango de auditoría'}
                     </div>
                 ) : (
-                    <DataTable columns={columns} data={history} />
+                    <DataTable columns={columns} data={donations} />
                 )}
             </div>
         </div>

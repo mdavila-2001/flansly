@@ -23,7 +23,7 @@ export const CreatorDashboard = () => {
 
     const [contentText, setContentText] = useState('');
     const [postImage, setPostImage] = useState(null);
-    const [fileInputKey, setFileInputKey] = useState(0); // Para forzar el remonte y limpieza de FileInput
+    const [fileInputKey, setFileInputKey] = useState(0);
     const fileInputRef = useRef(null);
 
     useEffect(() => {
@@ -47,19 +47,16 @@ export const CreatorDashboard = () => {
 
             await handleCreatePost(formData);
             
-            // Limpieza exitosa del formulario
             setContentText('');
             setPostImage(null);
-            setFileInputKey(prev => prev + 1); // Forzar remonte de FileInput para limpiar su estado interno
+            setFileInputKey(prev => prev + 1);
         } catch (err) {
             console.error('Error al publicar post:', err);
         }
     };
 
-    // Cortafuegos de envío físico: botón habilitado solo si hay contenido
     const isPublishDisabled = !contentText.trim() && !postImage;
 
-    // Sincronización defensiva del creador en el PostCard
     const processedPosts = posts.map(p => ({
         ...p,
         creator: p.creator || {
@@ -69,7 +66,6 @@ export const CreatorDashboard = () => {
         }
     }));
 
-    // Consolidar todos los comentarios para la sección "Recent Love"
     const recentComments = posts
         .flatMap(p => 
             (p.comments || []).map(c => ({
@@ -79,9 +75,8 @@ export const CreatorDashboard = () => {
             }))
         )
         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-        .slice(0, 5); // Tomamos los 5 más recientes
+        .slice(0, 5);
 
-    // Asignación de insignias estéticas según el nombre del seguidor
     const getBadgeStyle = (followerId) => {
         const charCodeSum = (followerId || '').split('').reduce((sum, c) => sum + c.codePointAt(0), 0);
         if (charCodeSum % 3 === 0) return { label: 'WHALE', icon: Crown, bg: 'bg-[#B45309]/20 text-[#FDE68A] border-[#B45309]/50' };

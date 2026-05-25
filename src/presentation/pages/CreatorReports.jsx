@@ -19,7 +19,6 @@ export const CreatorReports = () => {
         handleClear
     } = useCreatorReports();
 
-    // Definición de columnas de la DataTable
     const columns = [
         {
             header: 'Fecha',

@@ -1,4 +1,3 @@
-// src/presentation/pages/follower/CreatorProfileView.jsx
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useFollower } from '../../../application/hooks/useFollower';
@@ -13,10 +12,8 @@ import { resolveImageUrl } from '../../../core/utils/image.utils';
 export const CreatorProfileView = () => {
     const { id } = useParams();
     
-    // Estado local para controlar el modal de donación (SRP)
     const [isDonateModalOpen, setIsDonateModalOpen] = useState(false);
     
-    // Capa de Aplicación - Módulo Follower
     const { 
         currentProfile, 
         isLoading, 
@@ -26,37 +23,27 @@ export const CreatorProfileView = () => {
         handleDonate
     } = useFollower();
 
-    // Capa de Aplicación - Módulo FollowerActions (Comentarios)
     const { executeComment, isActionLoading } = useFollowerActions();
 
     useEffect(() => {
         fetchProfile(id);
     }, [id, fetchProfile]);
 
-    // Envío del apoyo financiero al backend
     const handleDonateSubmit = async (quantity) => {
         try {
-            console.log("🍮 ENVIANDO DONACIÓN AL HORNO:", { creatorId: id, quantity });
             await handleDonate(id, quantity);
-            console.log("✅ DONACIÓN EXITOSA. REFRESCANDO MURO...");
             await fetchProfile(id); 
             setIsDonateModalOpen(false);
         } catch (err) {
-            console.error("❌ ERROR EN PASARELA DE FLANES:", err);
             alert(`Error al procesar los flanes: ${err.response?.data?.message || err.message || 'Error interno del servidor'}`);
         }
     };
 
-
-    // Envío de comentarios privados a las publicaciones exclusivas
     const handleCommentSubmit = async (postId, content) => {
         try {
-            console.log("💬 PUBLICANDO COMENTARIO PRIVADO EN POST:", postId);
             await executeComment(postId, content);
-            console.log("✅ COMENTARIO PUBLICADO CON ÉXITO. REFRESCANDO...");
-            await fetchProfile(id); // Recargar perfil para inyectar en caliente
+            await fetchProfile(id);
         } catch (err) {
-            console.error("❌ ERROR AL PUBLICAR COMENTARIO PRIVADO:", err);
             alert(`Error al comentar: ${err.message}`);
         }
     };

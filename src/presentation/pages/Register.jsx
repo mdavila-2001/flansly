@@ -21,14 +21,11 @@ export const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Validaciones básicas antes del submit
         if (!displayName.trim() || !username.trim() || !email.trim() || !password.trim()) {
             return;
         }
 
         try {
-            // Nota de Arquitectura: Se respetan estrictamente las claves del Joi registerSchema
-            // del backend para evitar errores de validación de llaves desconocidas.
             await submitRegister({
                 displayName: displayName.trim(),
                 username: username.trim().toLowerCase(),
@@ -39,7 +36,6 @@ export const Register = () => {
                 banner: bannerFile
             });
 
-            // Tras un registro exitoso, redirigimos a la pantalla de login
             navigate('/login');
         } catch (err) {
             console.error('Error durante submitRegister:', err.message);

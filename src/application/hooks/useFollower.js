@@ -5,7 +5,9 @@ export const useFollower = () => {
     const [creators, setCreators] = useState([]);
     const [currentProfile, setCurrentProfile] = useState(null);
     const [feed, setFeed] = useState([]);
+    const [history, setHistory] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [isHistoryLoading, setIsHistoryLoading] = useState(false);
     const [error, setError] = useState(null);
 
     const fetchCreators = useCallback(async () => {
@@ -93,17 +95,34 @@ export const useFollower = () => {
         });
     }, []);
 
+    const fetchHistory = useCallback(async (startDate, endDate, creatorName) => {
+        setIsHistoryLoading(true);
+        setError(null);
+        try {
+            const data = await followerRepository.getHistory(startDate, endDate, creatorName);
+            setHistory(data || []);
+            return data;
+        } catch (err) {
+            setError(err.response?.data?.message || 'Error al cargar el historial de inversiones.');
+        } finally {
+            setIsHistoryLoading(false);
+        }
+    }, []);
+
     return {
         creators,
         currentProfile,
         feed,
+        history,
         isLoading,
+        isHistoryLoading,
         error,
         fetchCreators,
         fetchProfile,
         handleToggleFavorite,
         fetchFeed,
         handleDonate,
-        markAsDonated
+        markAsDonated,
+        fetchHistory
     };
 };

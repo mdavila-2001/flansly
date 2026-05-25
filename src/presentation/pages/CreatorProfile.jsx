@@ -6,6 +6,7 @@ import { Textarea } from '../components/ui/Textarea';
 import { FileInput } from '../components/ui/FileInput';
 import { Button } from '../components/ui/Button';
 import { Palette, Target, Save, CheckCircle } from 'lucide-react';
+import { resolveImageUrl } from '../../core/utils/image.utils';
 
 export const CreatorProfile = () => {
     const { user } = useAuth();
@@ -146,7 +147,7 @@ export const CreatorProfile = () => {
                             <div className="w-full h-48 bg-flansly-dark/60 rounded-2xl overflow-hidden relative border border-flansly-surface/30 flex items-center justify-center">
                                 {bannerPreview ? (
                                     <img 
-                                        src={bannerPreview.startsWith('blob:') ? bannerPreview : `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}${bannerPreview}`} 
+                                        src={bannerPreview.startsWith('blob:') ? bannerPreview : resolveImageUrl(bannerPreview)} 
                                         alt="Banner Preview" 
                                         className="w-full h-full object-cover" 
                                     />
@@ -158,7 +159,7 @@ export const CreatorProfile = () => {
                             <div className="absolute -bottom-14 left-8 z-20">
                                 <div className="relative group">
                                     <img 
-                                        src={avatarPreview.startsWith('blob:') || avatarPreview.startsWith('/') ? avatarPreview : `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}${avatarPreview}`} 
+                                        src={avatarPreview.startsWith('blob:') || avatarPreview.startsWith('/flansly_') ? avatarPreview : resolveImageUrl(avatarPreview)} 
                                         alt="Avatar Preview" 
                                         className="w-28 h-28 rounded-full border-4 border-flansly-surface/30 object-cover shadow-[0_0_20px_rgba(180,83,9,0.3)] bg-flansly-surface ring-2 ring-flansly-caramel/50 transition-transform duration-300 hover:scale-105" 
                                     />

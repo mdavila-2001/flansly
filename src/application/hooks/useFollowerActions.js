@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { followerRepository } from '../../data/repositories/follower.repository';
+import { SUPPORT_TYPES } from '../../core/constants/support.constants';
 
 export const useFollowerActions = () => {
     const [isActionLoading, setIsActionLoading] = useState(false);
@@ -7,10 +8,11 @@ export const useFollowerActions = () => {
 
     // DoD #1: Aislamiento del cálculo financiero en la Capa de Aplicación
     const calculateCost = useCallback((quantity) => {
-        const parsed = Number.parseInt(quantity, 10);
-        if (Number.isNaN(parsed) || parsed <= 0) return 0;
-        return parsed * 10;
+        const parsed = parseInt(quantity, 10);
+        if (isNaN(parsed) || parsed <= 0) return 0;
+        return parsed * SUPPORT_TYPES.FLAN.priceBs;
     }, []);
+
 
     // DoD #3: Validación defensiva antes de despachar al backend
     const executeDonation = useCallback(async (creatorId, quantity) => {

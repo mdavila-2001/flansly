@@ -1,8 +1,3 @@
-/**
- * Resuelve la URL de una imagen integrando dinámicamente la dirección del backend.
- * @param {string} url - Ruta relativa o absoluta de la imagen.
- * @returns {string} URL resuelta y lista para usar en etiquetas img.
- */
 export const resolveImageUrl = (url) => {
     if (!url) return '';
     if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
@@ -11,6 +6,14 @@ export const resolveImageUrl = (url) => {
     if (url === '/flansly_logo.png') {
         return url;
     }
-    const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-    return `${baseUrl}${url}`;
+    
+    // Obtener la URL base y limpiarle el /api si lo tiene
+    const apiEnv = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+    const baseUrl = apiEnv.replace(/\/api\/?$/, ''); 
+    
+    // Asegurar que no hayan dobles barras al concatenar
+    const cleanBase = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+    const cleanUrl = url.startsWith('/') ? url : `/${url}`;
+    
+    return `${cleanBase}${cleanUrl}`;
 };

@@ -8,8 +8,8 @@ export const useFollowerActions = () => {
 
     // DoD #1: Aislamiento del cálculo financiero en la Capa de Aplicación
     const calculateCost = useCallback((quantity) => {
-        const parsed = parseInt(quantity, 10);
-        if (isNaN(parsed) || parsed <= 0) return 0;
+        const parsed = Number.parseInt(quantity, 10);
+        if (Number.isNaN(parsed) || parsed <= 0) return 0;
         return parsed * SUPPORT_TYPES.FLAN.priceBs;
     }, []);
 

@@ -3,7 +3,7 @@ import { useFollower } from '../../../application/hooks/useFollower';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
 import { DataTable } from '../../components/ui/DataTable';
-import { Calendar, Search, Heart, Award, DollarSign } from 'lucide-react';
+import { Search, Heart, Award, DollarSign } from 'lucide-react';
 
 export const FollowerHistory = () => {
     const { history, isHistoryLoading, error, fetchHistory } = useFollower();
@@ -12,7 +12,6 @@ export const FollowerHistory = () => {
     const [creatorName, setCreatorName] = useState('');
 
     useEffect(() => {
-        // Carga inicial sin filtros
         fetchHistory();
     }, [fetchHistory]);
 
@@ -28,11 +27,9 @@ export const FollowerHistory = () => {
         fetchHistory();
     };
 
-    // Calcular KPIs acumulativos de inversiones locales del seguidor
     const totalFlans = history.reduce((sum, item) => sum + (item.quantity || 0), 0);
     const totalInvested = history.reduce((sum, item) => sum + Number(item.totalAmount || item.amount || 0), 0);
 
-    // Definición de columnas ultra defensivas y robustas
     const columns = [
         {
             header: 'Fecha',
@@ -53,10 +50,18 @@ export const FollowerHistory = () => {
             accessor: 'creatorName',
             cell: (row) => {
                 const name = row.creator?.displayName || row.creatorName || 'Creador de Flansly';
+                const username = row.creator?.username;
                 return (
-                    <span className="font-semibold text-white flex items-center gap-2">
-                        🍮 {name}
-                    </span>
+                    <div className="flex flex-col">
+                        <span className="font-semibold text-white flex items-center gap-2">
+                            🍮 {name}
+                        </span>
+                        {username && (
+                            <span className="text-[10px] text-flansly-muted font-mono pl-6">
+                                @{username}
+                            </span>
+                        )}
+                    </div>
                 );
             }
         },
@@ -89,7 +94,7 @@ export const FollowerHistory = () => {
     ];
 
     return (
-        <div className="space-y-8 max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto space-y-6 text-[#F9F9F9]">
             {/* Cabecera de la Pantalla */}
             <div className="border-b border-flansly-surface/30 pb-6">
                 <h2 className="text-3xl font-extrabold text-[#F9F9F9] font-['Manrope'] tracking-tight flex items-center gap-2">
@@ -203,7 +208,7 @@ export const FollowerHistory = () => {
                 </h3>
                 {history.length === 0 ? (
                     <div className="text-center py-20 bg-flansly-card/30 rounded-3xl border border-flansly-surface/20 text-flansly-muted text-sm font-mono leading-relaxed">
-                        {isHistoryLoading ? 'Auditiando historial de transacciones...' : 'Aún no has invitado flanes a ningún creador independiente.'}
+                        {isHistoryLoading ? 'Auditando historial de transacciones...' : 'Aún no has invitado flanes a ningún creador independiente.'}
                     </div>
                 ) : (
                     <DataTable columns={columns} data={history} />
